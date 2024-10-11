@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "My_SocNet_Win/1.0.0": {
+        "runtime": {
+          "My_SocNet_Win.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "My_SocNet_Win/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
