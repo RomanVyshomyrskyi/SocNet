@@ -12,14 +12,25 @@ public class MongoDbService : IDatabaseService
         _database = client.GetDatabase("My_SocNet_Win");
     }
 
-    //TODO: Implement the Connect and Disconnect methods
-    public void Connect()
+    public IMongoDatabase GetDatabase()
     {
-        throw new NotImplementedException();
+
+        return _database;
+
+    }
+
+
+    #region IDatabaseService implementation (usles for MongoDB)
+       public void Connect()
+    {
+        // Connection is established in the constructor, so no additional implementation is needed here.
     }
 
     public void Disconnect()
     {
-        throw new NotImplementedException();
+        // MongoDB .NET driver does not provide a direct method to disconnect.
+        // Connections are managed by the driver and will be closed automatically when the application ends.
     }
+    
+    #endregion
 }

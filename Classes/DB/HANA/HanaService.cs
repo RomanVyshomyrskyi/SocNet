@@ -11,7 +11,14 @@ public class HanaService : IDatabaseService
     {
         _connection = new HanaConnection(connectionString);
     }
+    
+     public HanaConnection GetConnection()
+    {
+        return _connection;
+    }
 
+
+    #region IDatabaseService implementation
     public void Connect()
     {
         _connection.Open();
@@ -21,5 +28,5 @@ public class HanaService : IDatabaseService
     {
         _connection.Close();
     }
-
+    #endregion
 }

@@ -11,15 +11,22 @@ public class Neo4jService : IDatabaseService
     {
         _driver = GraphDatabase.Driver(connectionString, AuthTokens.None);
     }
-    //TODO: Implement the Connect and Disconnect methods
+    
+    public IDriver GetDriver()
+    {
+        return _driver;
+    }
+
+
+    #region IDatabaseService implementation
     public void Connect()
     {
-        // Логіка підключення до Neo4J
+        // Connection is established in the constructor, so no additional implementation is needed here.
     }
 
     public void Disconnect()
     {
-        _driver.CloseAsync().Wait();
+        _driver.DisposeAsync().AsTask().Wait();
     }
-
+    #endregion
 }
