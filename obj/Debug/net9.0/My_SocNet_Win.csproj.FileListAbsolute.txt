@@ -95,3 +95,4 @@ c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\refint\My_SocNet_
 c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\My_SocNet_Win.pdb
 c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\My_SocNet_Win.genruntimeconfig.cache
 c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\ref\My_SocNet_Win.dll
+c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\My_SocNet_Win.sourcelink.json

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("My_SocNet_Win")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+59de74a7f2a12427b26812d20c9448b068e1ad58")]
 [assembly: System.Reflection.AssemblyProductAttribute("My_SocNet_Win")]
 [assembly: System.Reflection.AssemblyTitleAttribute("My_SocNet_Win")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

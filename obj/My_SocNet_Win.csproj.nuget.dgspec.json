@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {}
+    "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {}
   },
   "projects": {
-    "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {
+    "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
+        "projectUniqueName": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
         "projectName": "My_SocNet_Win",
-        "projectPath": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
+        "projectPath": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
         "packagesPath": "C:\\Users\\vroma\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\",
+        "outputPath": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\vroma\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +43,24 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.29.0, )"
+            },
+            "Neo4j.Driver": {
+              "target": "Package",
+              "version": "[5.25.0, )"
+            },
+            "SapHana.DotNetCore.Data.Provider": {
+              "target": "Package",
+              "version": "[2.11.14, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.8.16, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
