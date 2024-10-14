@@ -58,6 +58,8 @@ switch (databaseType)
         builder.Services.AddSingleton(neo4jService);
         builder.Services.AddSingleton<IUserRepository>(new Neo4jUserRepository(neo4jService));
         break;
+    case "MSSQL":
+        throw new NotImplementedException("MS SQL Server is not implemented yet");
     default:
         throw new Exception("Unsupported database type");
 }
