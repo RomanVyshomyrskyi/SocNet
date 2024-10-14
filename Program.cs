@@ -1,6 +1,7 @@
 using My_SocNet_Win.Classes.DB;
 using My_SocNet_Win.Classes.DB.HANA;
 using My_SocNet_Win.Classes.DB.MongoDB;
+using My_SocNet_Win.Classes.DB.MSSQL;
 using My_SocNet_Win.Classes.DB.Neo4J;
 using My_SocNet_Win.Classes.DB.Redis;
 using My_SocNet_Win.Classes.User;
@@ -59,7 +60,15 @@ switch (databaseType)
         builder.Services.AddSingleton<IUserRepository>(new Neo4jUserRepository(neo4jService));
         break;
     case "MSSQL":
-        throw new NotImplementedException("MS SQL Server is not implemented yet");
+        var mssqlConnectionString = builder.Configuration.GetConnectionString("MSSQL");
+        if (string.IsNullOrEmpty(mssqlConnectionString))
+        {
+            throw new ArgumentNullException(nameof(mssqlConnectionString), "MSSQL connection string cannot be null or empty.");
+        }
+        var mssqlService = new MssqlService(mssqlConnectionString);
+        builder.Services.AddSingleton(mssqlService);
+        builder.Services.AddSingleton<IUserRepository>(new MssqlUserRepository(mssqlService));
+        break;
     default:
         throw new Exception("Unsupported database type");
 }

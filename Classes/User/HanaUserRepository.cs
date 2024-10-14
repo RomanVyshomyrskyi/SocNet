@@ -6,7 +6,7 @@ namespace My_SocNet_Win.Classes.User;
 
 public class HanaUserRepository : IUserRepository
 {
-    private readonly HanaConnection _connection;
+private readonly HanaConnection _connection;
 
     public HanaUserRepository(HanaService hanaService)
     {
@@ -15,13 +15,13 @@ public class HanaUserRepository : IUserRepository
 
     public async Task<User> GetUserByIdAsync(int id)
     {
-        //TODO: Implementation for getting user by ID from SAP HANA
+        // Implementation for getting user by ID from SAP HANA
         throw new NotImplementedException();
     }
 
     public async Task<User> GetUserByUserNameAsync(string userName)
     {
-        //TODO: Implementation for getting user by UserName from SAP HANA
+        // Implementation for getting user by UserName from SAP HANA
         throw new NotImplementedException();
     }
 
@@ -34,13 +34,13 @@ public class HanaUserRepository : IUserRepository
     public async Task CreateUserAsync(User user)
     {
         user.DateOfCreation = DateTime.UtcNow;
-        //TODO: Implementation for creating user in SAP HANA
+        // Implementation for creating user in SAP HANA
         throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
-        //TODO: Implementation for getting all users from SAP HANA
+        // Implementation for getting all users from SAP HANA
         throw new NotImplementedException();
     }
 

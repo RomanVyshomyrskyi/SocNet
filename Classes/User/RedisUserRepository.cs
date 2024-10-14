@@ -9,7 +9,7 @@ namespace My_SocNet_Win.Classes.User;
 
 public class RedisUserRepository : IUserRepository
 {
-    private readonly IDatabase _database;
+     private readonly IDatabase _database;
 
     public RedisUserRepository(RedisService redisService)
     {
@@ -24,7 +24,7 @@ public class RedisUserRepository : IUserRepository
 
     public async Task<User> GetUserByUserNameAsync(string userName)
     {
-        //TODO: Implementation for getting user by UserName from Redis
+        // Implementation for getting user by UserName from Redis
         throw new NotImplementedException();
     }
 
@@ -43,7 +43,7 @@ public class RedisUserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
-        //TODO: Implementation for getting all users from Redis
+        // Implementation for getting all users from Redis
         throw new NotImplementedException();
     }
     
