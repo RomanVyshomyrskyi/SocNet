@@ -1,5 +1,17 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/My_SocNet_Win/css/login.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\login.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"6157"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00224RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\u0022"},{"Name":"Last-Modified","Value":"Wed, 16 Oct 2024 11:59:32 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/My_SocNet_Win/css/login.thue8ecvre.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\login.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"thue8ecvre"},{"Name":"integrity","Value":"sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="},{"Name":"label","Value":"_content/My_SocNet_Win/css/login.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6157"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00224RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\u0022"},{"Name":"Last-Modified","Value":"Wed, 16 Oct 2024 11:59:32 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/My_SocNet_Win/css/site.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

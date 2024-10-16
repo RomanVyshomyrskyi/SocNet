@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\My_SocNet_Win.6majlyzmr5.bundle.scp.css"
     },
     {
+      "Id": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\login.css",
+      "PackagePath": "staticwebassets\\css\\login.css"
+    },
+    {
       "Id": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

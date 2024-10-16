@@ -123,3 +123,4 @@ c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\compressed\3y20gj
 c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\My_SocNe.23BF699B.Up2Date
 c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\compressed\3f33v5bykd-6majlyzmr5.gz
 c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\compressed\e2ql9os7bi-6majlyzmr5.gz
+c:\Users\vroma\Documents\Uni\C#\My_SocNet_Win\obj\Debug\net9.0\compressed\9ac79ssat2-thue8ecvre.gz

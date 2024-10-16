@@ -301,6 +301,304 @@
       ]
     },
     {
+      "Route": "css/login.css",
+      "AssetFile": "css/login.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000681663258"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.css",
+      "AssetFile": "css/login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.css.gz",
+      "AssetFile": "css/login.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.thue8ecvre.css",
+      "AssetFile": "css/login.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000681663258"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "thue8ecvre"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        },
+        {
+          "Name": "label",
+          "Value": "css/login.css"
+        }
+      ]
+    },
+    {
+      "Route": "css/login.thue8ecvre.css",
+      "AssetFile": "css/login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "thue8ecvre"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        },
+        {
+          "Name": "label",
+          "Value": "css/login.css"
+        }
+      ]
+    },
+    {
+      "Route": "css/login.thue8ecvre.css.gz",
+      "AssetFile": "css/login.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "thue8ecvre"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw="
+        },
+        {
+          "Name": "label",
+          "Value": "css/login.css.gz"
+        }
+      ]
+    },
+    {
       "Route": "css/site.css",
       "AssetFile": "css/site.css.gz",
       "Selectors": [

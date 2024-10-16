@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0++MnucCIdolDJ9lV4tFxMZlzNHQpQ5iVVRFIVOKMy4=",
+  "Hash": "eaLbKjG6HhwfBmid6t1OEFjAuIfnEiHTe68EgMxuhj4=",
   "Source": "My_SocNet_Win",
   "BasePath": "_content/My_SocNet_Win",
   "Mode": "Default",
@@ -393,6 +393,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Identity": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\9ac79ssat2-thue8ecvre.gz",
+      "SourceId": "My_SocNet_Win",
+      "SourceType": "Discovered",
+      "ContentRoot": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/My_SocNet_Win",
+      "RelativePath": "css/login#[.{fingerprint=thue8ecvre}]?.css.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\login.css",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "w4ed0z1jv1",
+      "Integrity": "0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\login.css"
     },
     {
       "Identity": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\9kd2cavcbo-87fc7y1x7t.gz",
@@ -1401,6 +1422,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\My_SocNet_Win.bundle.scp.css"
+    },
+    {
+      "Identity": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\login.css",
+      "SourceId": "My_SocNet_Win",
+      "SourceType": "Discovered",
+      "ContentRoot": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\",
+      "BasePath": "_content/My_SocNet_Win",
+      "RelativePath": "css/login#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "thue8ecvre",
+      "Integrity": "4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\login.css"
     },
     {
       "Identity": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\site.css",
@@ -2727,6 +2769,304 @@
     }
   ],
   "Endpoints": [
+    {
+      "Route": "css/login.css",
+      "AssetFile": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\9ac79ssat2-thue8ecvre.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000681663258"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.css",
+      "AssetFile": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.css.gz",
+      "AssetFile": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\9ac79ssat2-thue8ecvre.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.thue8ecvre.css",
+      "AssetFile": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\9ac79ssat2-thue8ecvre.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000681663258"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "thue8ecvre"
+        },
+        {
+          "Name": "label",
+          "Value": "css/login.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.thue8ecvre.css",
+      "AssetFile": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\wwwroot\\css\\login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "thue8ecvre"
+        },
+        {
+          "Name": "label",
+          "Value": "css/login.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-4RHe6rUIFn8Hp1jEDd90E31hOShbyuB7AKnRS8JhXqc="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.thue8ecvre.css.gz",
+      "AssetFile": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\9ac79ssat2-thue8ecvre.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1466"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Oct 2024 11:59:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "thue8ecvre"
+        },
+        {
+          "Name": "label",
+          "Value": "css/login.css.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-0MT+tvsfFdEGF0SBHRmaslOtCwiZPjdnTvLYB3HurBw="
+        }
+      ]
+    },
     {
       "Route": "css/site.css",
       "AssetFile": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\Debug\\net9.0\\compressed\\3y20gjj9yp-voyfuxkvjf.gz",
