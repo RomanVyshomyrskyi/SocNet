@@ -2,7 +2,7 @@ using System;
 
 namespace My_SocNet_Win.Classes.User;
 
-public class User : DataDB
+public class User : GetDBType
 {
     public int Id { get; set; }
     public required string UserName { get; set; }

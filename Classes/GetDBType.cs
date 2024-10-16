@@ -2,7 +2,7 @@ using System;
 
 namespace My_SocNet_Win.Classes;
 
-public class DataDB
+public class GetDBType
 {
     protected static string GetDatabaseType(IServiceProvider serviceProvider)
     {
