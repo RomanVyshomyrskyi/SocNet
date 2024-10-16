@@ -27,7 +27,7 @@ public class User : GetDBType
         };
     }
 
-    public static async Task Inser(IEnumerable<User> users, IServiceProvider serviceProvider)
+    public static async Task Insert(IEnumerable<User> users, IServiceProvider serviceProvider)
     {
         var databaseType = GetDatabaseType(serviceProvider);
 
@@ -37,5 +37,13 @@ public class User : GetDBType
         {
             await userRepository.CreateUserAsync(user);
         }
+    }
+    public static async Task Insert( User user, IServiceProvider serviceProvider)
+    {
+        var databaseType = GetDatabaseType(serviceProvider);
+
+        var userRepository = GetUserRepository(serviceProvider);
+
+        await userRepository.CreateUserAsync(user);
     }
 }
