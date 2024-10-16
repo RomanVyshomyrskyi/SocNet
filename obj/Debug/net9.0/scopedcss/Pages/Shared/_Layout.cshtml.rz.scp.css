@@ -1,31 +1,181 @@
-/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand[b-fzy8sgvk63] {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+header[b-fzy8sgvk63] {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: transparent;
+  z-index: 100;
+  height: 60px;
+}
+ul[b-fzy8sgvk63] {
+  list-style-type: none;
+  display: flex;
+  padding: 5px 0;
+  background-size: 400% 400%;
+  background-color: #2a2b38;
+  border-radius: 6px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
-a[b-fzy8sgvk63] {
-  color: #0077cc;
+.line-color-henge[b-fzy8sgvk63]{
+  border-top: 1px solid #6c757d !important;
 }
 
-.btn-primary[b-fzy8sgvk63] {
+.nav_burItem[b-fzy8sgvk63] {
   color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  text-decoration: none;
+  padding: 45px 30px;
+  padding-bottom: 5px;
+  font-family: verdana;
+  font-weight: lighter;
+  font-size: 24px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  transition: 1s;
 }
 
-.nav-pills .nav-link.active[b-fzy8sgvk63], .nav-pills .show > .nav-link[b-fzy8sgvk63] {
+.navigation[b-fzy8sgvk63] {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fa-search:hover[b-fzy8sgvk63] {
   color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  animation: 1.5s myFlash-b-fzy8sgvk63 linear infinite;
+  text-shadow: 2px 2px 30px #fff;
+  transition: 2s;
 }
 
-.border-top[b-fzy8sgvk63] {
-  border-top: 1px solid #e5e5e5;
+.active3:hover[b-fzy8sgvk63] {
+  color: #fff;
+  animation: 1.5s myFlash-b-fzy8sgvk63 linear infinite;
+  text-shadow: 2px 2px 30px #fff;
+  transition: 2s;
+  margin-top: -100px;
 }
+
+.active2:hover[b-fzy8sgvk63] {
+  color: #fff;
+  animation: 1.5s myFlash-b-fzy8sgvk63 linear infinite;
+  text-shadow: 2px 2px 30px #fff;
+  transition: 2s;
+}
+
+.active1:hover[b-fzy8sgvk63] {
+  color: #fff;
+  animation: 1.5s myFlash-b-fzy8sgvk63 linear infinite;
+  text-shadow: 2px 2px 30px #fff;
+  transition: 2s;
+}
+
+.active:hover[b-fzy8sgvk63] {
+  color: #fff;
+  animation: 1.5s myFlash-b-fzy8sgvk63 linear infinite;
+  text-shadow: 2px 2px 30px #fff;
+  transition: 2s;
+}
+
+@keyframes myFlash-b-fzy8sgvk63 {
+  0% {
+    opacity: 1;
+    text-shadow: transparent;
+  }
+  
+  50% {
+    opacity: .1;
+  }
+  
+  100% {
+    opacity: 1;
+    text-shadow: 2px 2px 20px #fff;
+  }
+}
+
+
+nav[b-fzy8sgvk63] {
+  transition: 3s;
+  animation: 3s myAnimation-b-fzy8sgvk63 ease linear;
+}
+
+@keyframes myAnimation-b-fzy8sgvk63 {
+  0% {
+    opacity: 0;
+  }
+  
+  100% {
+    opacity: 1;
+  }
+}
+
+.nav-type[b-fzy8sgvk63] {
+  animation: 3s myWorld-b-fzy8sgvk63 ease linear;
+}
+
+@keyframes myWorld-b-fzy8sgvk63 {
+  0% {
+    opacity: 0;
+  }
+  
+  100% {
+    opacity: 1;
+  }
+}
+
+.text-content-fluid[b-fzy8sgvk63] {
+  display: flex;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 53%;
+  left: 50%;
+  letter-spacing: 25px;
+  font-size: 50px;
+  font-family: verdana;
+}
+
+
+.Active[b-fzy8sgvk63] {
+  transition: 2s;
+  margin-top: 1px;
+}
+
+
+
+nav[b-fzy8sgvk63] {
+  display: flex;
+  height: 60px;
+}
+
+.header_container_Name[b-fzy8sgvk63]{
+  display: flex;
+  width: 45%;
+  align-items: top;
+  justify-content: 20%;
+}
+
+.header_container_Name .bg-primary[b-fzy8sgvk63] {
+  background-color: #1b6ec2;
+  border-radius: 0 0 5px 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  margin-left: 40px;
+}
+
+.header_container_Name .bg-primary h1[b-fzy8sgvk63] {
+  color: #fff;
+  font-size: 1.3rem;
+  font-family: 'Brush Script MT', cursive;
+  line-height: 60px;
+  margin: 0;
+}
+.header_container[b-fzy8sgvk63]{
+  display: flex;
+  width: 55%;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .border-bottom[b-fzy8sgvk63] {
   border-bottom: 1px solid #e5e5e5;
 }

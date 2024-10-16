@@ -1364,11 +1364,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
+      "projectUniqueName": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
       "projectName": "My_SocNet_Win",
-      "projectPath": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
+      "projectPath": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
       "packagesPath": "C:\\Users\\vroma\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\",
+      "outputPath": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\vroma\\AppData\\Roaming\\NuGet\\NuGet.Config"

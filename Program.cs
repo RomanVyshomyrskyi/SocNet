@@ -1,4 +1,5 @@
 using My_SocNet_Win;
+using My_SocNet_Win.Classes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ builder.Services.AddRazorPages();
 
 //Add configuration from appsettings.json
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+// Add the SiteSettings configuration
+builder.Services.Configure<SiteSettings>(builder.Configuration.GetSection("SiteSettings"));
 
 // Get the database type from the configuration (appsettings.json)
 var databaseType = builder.Configuration.GetValue<string>("DatabaseType");
