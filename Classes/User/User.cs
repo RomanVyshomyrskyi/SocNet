@@ -2,7 +2,7 @@ using System;
 
 namespace My_SocNet_Win.Classes.User;
 
-public class User : GetDBType
+public class Users : GetDBType
 {
     public int Id { get; set; }
     public required string UserName { get; set; }
@@ -26,24 +26,9 @@ public class User : GetDBType
             _ => throw new Exception("Unsupported database type")
         };
     }
-
-    public static async Task Insert(IEnumerable<User> users, IServiceProvider serviceProvider)
+        public static async Task InsertUserAsync(Users user, IServiceProvider serviceProvider)
     {
-        var databaseType = GetDatabaseType(serviceProvider);
-
         var userRepository = GetUserRepository(serviceProvider);
-
-        foreach (var user in users)
-        {
-            await userRepository.CreateUserAsync(user);
-        }
-    }
-    public static async Task Insert( User user, IServiceProvider serviceProvider)
-    {
-        var databaseType = GetDatabaseType(serviceProvider);
-
-        var userRepository = GetUserRepository(serviceProvider);
-
         await userRepository.CreateUserAsync(user);
     }
 }

@@ -25,6 +25,7 @@ DatabaseConfigurator.ConfigureDatabaseServices(builder.Services, builder.Configu
 //Build the app
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

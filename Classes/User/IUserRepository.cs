@@ -6,10 +6,10 @@ namespace My_SocNet_Win.Classes.User;
 
 public interface IUserRepository
 {
-    Task<User> GetUserByIdAsync(int id);
-    Task<User> GetUserByUserNameAsync(string userName);
+    Task<Users> GetUserByIdAsync(int id);
+    Task<Users> GetUserByUserNameAsync(string userName);
     Task<bool> ValidateUserCredentialsAsync(string userName, string password);
-    Task CreateUserAsync(User user);
-    Task<IEnumerable<User>> GetAllUsersAsync();
+    Task CreateUserAsync(Users user);
+    Task<IEnumerable<Users>> GetAllUsersAsync();
 
 }

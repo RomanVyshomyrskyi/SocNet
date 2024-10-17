@@ -7,21 +7,21 @@ namespace My_SocNet_Win.Classes.User;
 public class MongoUserRepository : IUserRepository
 {
 
-    private readonly IMongoCollection<User> _users;
+    private readonly IMongoCollection<Users> _usersCollection;
 
     public MongoUserRepository(MongoDbService mongoDbService)
     {
-        _users = mongoDbService.GetDatabase().GetCollection<User>("users");
+        _usersCollection = mongoDbService.GetDatabase().GetCollection<Users>("users");
     }
 
-    public async Task<User> GetUserByIdAsync(int id)
+    public async Task<Users> GetUserByIdAsync(int id)
     {
-        return await _users.Find(u => u.Id == id).FirstOrDefaultAsync();
+        return await _usersCollection.Find(u => u.Id == id).FirstOrDefaultAsync();
     }
 
-    public async Task<User> GetUserByUserNameAsync(string userName)
+    public async Task<Users> GetUserByUserNameAsync(string userName)
     {
-        return await _users.Find(u => u.UserName == userName).FirstOrDefaultAsync();
+            return await _usersCollection.Find(u => u.UserName == userName).FirstOrDefaultAsync();
     }
 
     public async Task<bool> ValidateUserCredentialsAsync(string userName, string password)
@@ -30,15 +30,24 @@ public class MongoUserRepository : IUserRepository
         return user != null && user.Password == password;
     }
 
-    public async Task CreateUserAsync(User user)
-    {
-        user.DateOfCreation = DateTime.UtcNow;
-        await _users.InsertOneAsync(user);
-    }
+    public async Task CreateUserAsync(Users user)
+        {
+            try
+            {
+                await _usersCollection.InsertOneAsync(user);
+            }
+            catch (Exception ex)
+            {
+                // Логування помилки
+                Console.WriteLine($"Error inserting user: {ex.Message}");
+                throw;
+            }
+        }
+        
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    public async Task<IEnumerable<Users>> GetAllUsersAsync()
     {
-        return await _users.Find(_ => true).ToListAsync();
+        return await _usersCollection.Find(_ => true).ToListAsync();
     }
 
 }

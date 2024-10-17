@@ -6,10 +6,17 @@ namespace My_SocNet_Win.Classes.DB.MSSQL;
 public class MssqlService : IDatabaseService
 {
     private readonly SqlConnection _connection;
+    private readonly string _connectionString;
 
     public MssqlService(string connectionString)
     {
-        _connection = new SqlConnection(connectionString);
+        try{
+            _connection = new SqlConnection(connectionString);
+        }
+        catch (Exception e){
+            throw new Exception("Error while creating connection", e);
+        }
+        _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
     }
 
     public SqlConnection GetConnection()
@@ -32,4 +39,5 @@ public class MssqlService : IDatabaseService
             _connection.Close();
         }
     }
+    public string ConnectionString => _connectionString;
 }

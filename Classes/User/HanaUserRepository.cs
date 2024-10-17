@@ -13,13 +13,13 @@ private readonly HanaConnection _connection;
         _connection = hanaService.GetConnection();
     }
 
-    public async Task<User> GetUserByIdAsync(int id)
+    public async Task<Users> GetUserByIdAsync(int id)
     {
         // Implementation for getting user by ID from SAP HANA
         throw new NotImplementedException();
     }
 
-    public async Task<User> GetUserByUserNameAsync(string userName)
+    public async Task<Users> GetUserByUserNameAsync(string userName)
     {
         // Implementation for getting user by UserName from SAP HANA
         throw new NotImplementedException();
@@ -31,14 +31,14 @@ private readonly HanaConnection _connection;
         return user != null && user.Password == password;
     }
 
-    public async Task CreateUserAsync(User user)
+    public async Task CreateUserAsync(Users user)
     {
         user.DateOfCreation = DateTime.UtcNow;
         // Implementation for creating user in SAP HANA
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    public async Task<IEnumerable<Users>> GetAllUsersAsync()
     {
         // Implementation for getting all users from SAP HANA
         throw new NotImplementedException();

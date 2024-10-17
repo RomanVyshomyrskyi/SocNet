@@ -16,13 +16,13 @@ public class RedisUserRepository : IUserRepository
         _database = redisService.GetDatabase();
     }
 
-    public async Task<User> GetUserByIdAsync(int id)
+    public async Task<Users> GetUserByIdAsync(int id)
     {
         var userJson = await _database.StringGetAsync(id.ToString());
-        return userJson.HasValue ? JsonConvert.DeserializeObject<User>(userJson) : null;
+        return userJson.HasValue ? JsonConvert.DeserializeObject<Users>(userJson) : null;
     }
 
-    public async Task<User> GetUserByUserNameAsync(string userName)
+    public async Task<Users> GetUserByUserNameAsync(string userName)
     {
         // Implementation for getting user by UserName from Redis
         throw new NotImplementedException();
@@ -34,14 +34,14 @@ public class RedisUserRepository : IUserRepository
         return user != null && user.Password == password;
     }
 
-    public async Task CreateUserAsync(User user)
+    public async Task CreateUserAsync(Users user)
     {
         user.DateOfCreation = DateTime.UtcNow;
         var userJson = JsonConvert.SerializeObject(user);
         await _database.StringSetAsync(user.Id.ToString(), userJson);
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    public async Task<IEnumerable<Users>> GetAllUsersAsync()
     {
         // Implementation for getting all users from Redis
         throw new NotImplementedException();
