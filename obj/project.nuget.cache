@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bdQZ4nb9dZo=",
+  "dgSpecHash": "hZs8cWSFblI=",
   "success": true,
-  "projectFilePath": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
+  "projectFilePath": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vroma\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\vroma\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
@@ -10,6 +10,7 @@
     "C:\\Users\\vroma\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\5.0.0\\microsoft.bcl.asyncinterfaces.5.0.0.nupkg.sha512",
     "C:\\Users\\vroma\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\vroma\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\vroma\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.21.0\\microsoft.visualstudio.azure.containers.tools.targets.1.21.0.nupkg.sha512",
     "C:\\Users\\vroma\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\vroma\\.nuget\\packages\\mongodb.bson\\2.29.0\\mongodb.bson.2.29.0.nupkg.sha512",
     "C:\\Users\\vroma\\.nuget\\packages\\mongodb.driver\\2.29.0\\mongodb.driver.2.29.0.nupkg.sha512",

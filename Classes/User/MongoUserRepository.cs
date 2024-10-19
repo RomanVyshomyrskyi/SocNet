@@ -1,53 +1,52 @@
 using System;
 using MongoDB.Driver;
-using My_SocNet_Win.Classes.DB.MongoDB;
 
 namespace My_SocNet_Win.Classes.User;
 
-public class MongoUserRepository : IUserRepository
+public class MongoUserRepository : IUserRepository<MongoUsers>
 {
+    private readonly IMongoCollection<MongoUsers> _collection;
 
-    private readonly IMongoCollection<Users> _usersCollection;
-
-    public MongoUserRepository(MongoDbService mongoDbService)
+    public MongoUserRepository(IMongoDatabase database)
     {
-        _usersCollection = mongoDbService.GetDatabase().GetCollection<Users>("users");
+        _collection = database.GetCollection<MongoUsers>("Users");
     }
 
-    public async Task<Users> GetUserByIdAsync(int id)
+    public async Task<MongoUsers> GetUserByIdAsync(string id)
     {
-        return await _usersCollection.Find(u => u.Id == id).FirstOrDefaultAsync();
-    }
-
-    public async Task<Users> GetUserByUserNameAsync(string userName)
-    {
-            return await _usersCollection.Find(u => u.UserName == userName).FirstOrDefaultAsync();
-    }
-
-    public async Task<bool> ValidateUserCredentialsAsync(string userName, string password)
-    {
-        var user = await GetUserByUserNameAsync(userName);
-        return user != null && user.Password == password;
-    }
-
-    public async Task CreateUserAsync(Users user)
+        if (!int.TryParse(id, out int userId))
         {
-            try
-            {
-                await _usersCollection.InsertOneAsync(user);
-            }
-            catch (Exception ex)
-            {
-                // Логування помилки
-                Console.WriteLine($"Error inserting user: {ex.Message}");
-                throw;
-            }
+            throw new ArgumentException("Invalid user ID format", nameof(id));
         }
-        
-
-    public async Task<IEnumerable<Users>> GetAllUsersAsync()
-    {
-        return await _usersCollection.Find(_ => true).ToListAsync();
+        return await _collection.Find(u => u.Id == userId).FirstOrDefaultAsync();
     }
 
+    public async Task<IEnumerable<MongoUsers>> GetAllUsersAsync()
+    {
+        return await _collection.Find(_ => true).ToListAsync();
+    }
+
+    public async Task AddUserAsync(MongoUsers user)
+    {
+        await _collection.InsertOneAsync(user);
+    }
+
+    public async Task UpdateUserAsync(MongoUsers user)
+    {
+        await _collection.ReplaceOneAsync(u => u.Id == user.Id, user);
+    }
+
+    public async Task DeleteUserAsync(string id)
+    {
+        if (!int.TryParse(id, out int userId))
+        {
+            throw new ArgumentException("Invalid user ID format", nameof(id));
+        }
+        await _collection.DeleteOneAsync(u => u.Id == userId);
+    }
+
+    public Task EnsureAdminExistsAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

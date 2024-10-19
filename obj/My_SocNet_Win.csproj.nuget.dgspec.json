@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {}
+    "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {}
   },
   "projects": {
-    "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {
+    "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
+        "projectUniqueName": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
         "projectName": "My_SocNet_Win",
-        "projectPath": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
+        "projectPath": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\My_SocNet_Win.csproj",
         "packagesPath": "C:\\Users\\vroma\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\",
+        "outputPath": "C:\\Users\\vroma\\Documents\\Uni\\C#\\My_SocNet_Win\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\vroma\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\vroma\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,6 +51,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.21.0, )"
+            },
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[2.29.0, )"

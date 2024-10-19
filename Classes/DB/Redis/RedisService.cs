@@ -29,5 +29,10 @@ public class RedisService : IDatabaseService
     {
         _redis.Close();
     }
+
+    public void EnsureDatabaseCreated()
+    {
+        throw new NotImplementedException();
+    }
     #endregion
 }

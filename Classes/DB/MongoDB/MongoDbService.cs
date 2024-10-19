@@ -37,6 +37,11 @@ public class MongoDbService : IDatabaseService
         // MongoDB .NET driver does not provide a direct method to disconnect.
         // Connections are managed by the driver and will be closed automatically when the application ends.
     }
-    
+
+    public void EnsureDatabaseCreated()
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 }

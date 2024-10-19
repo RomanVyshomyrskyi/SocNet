@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using My_SocNet_Win.Classes;
+using My_SocNet_Win.Classes.User;
 
 namespace My_SocNet_Win.Pages;
 
@@ -19,7 +20,7 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        DatabaseConfigurator.EnsureAdminUserExists(_serviceProvider);
+        
         ViewData["Title"] = _siteSettings.Title;
         ViewData["Name"] = _siteSettings.Name;
         ViewData["Footer"] = _siteSettings.Footer;

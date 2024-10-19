@@ -28,5 +28,10 @@ public class HanaService : IDatabaseService
     {
         _connection.Close();
     }
+
+    public void EnsureDatabaseCreated()
+    {
+        throw new NotImplementedException();
+    }
     #endregion
 }

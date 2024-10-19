@@ -28,5 +28,10 @@ public class Neo4jService : IDatabaseService
     {
         _driver.DisposeAsync().AsTask().Wait();
     }
+
+    public void EnsureDatabaseCreated()
+    {
+        throw new NotImplementedException();
+    }
     #endregion
 }

@@ -1,5 +1,6 @@
 using My_SocNet_Win;
 using My_SocNet_Win.Classes;
+using My_SocNet_Win.Classes.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +20,18 @@ if (string.IsNullOrEmpty(databaseType))
     throw new ArgumentNullException(nameof(databaseType), "DatabaseType configuration is missing or empty.");
 }
 
-DatabaseConfigurator.ConfigureDatabaseServices(builder.Services, builder.Configuration, databaseType);
+DatabaseConfigurator.ConfigureDatabase(builder.Services, builder.Configuration, databaseType);
 
 
 //Build the app
 var app = builder.Build();
 
+// Ensure the database and admin user exist
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    DatabaseConfigurator.EnsureAdminUserExists(services, databaseType);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

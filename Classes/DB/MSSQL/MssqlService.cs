@@ -24,6 +24,43 @@ public class MssqlService : IDatabaseService
         return _connection;
     }
 
+    public void EnsureDatabaseCreated()
+    {
+        // Implement logic to create database schema if it doesn't exist
+        using (var command = _connection.CreateCommand())
+        {
+            command.CommandText = @"
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Users' AND xtype='U')
+            CREATE TABLE Users (
+                Id INT PRIMARY KEY,
+                UserName NVARCHAR(50) NOT NULL,
+                PasswordHash NVARCHAR(255) NOT NULL,
+                Email NVARCHAR(50) NOT NULL,
+                DateOfCreation DATETIME NOT NULL,
+                LastLogin DATETIME NOT NULL,
+                ImgBinary NVARCHAR(MAX) NOT NULL
+            );
+
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserRoles' AND xtype='U')
+            CREATE TABLE UserRoles (
+                UserId INT NOT NULL,
+                Role NVARCHAR(50) NOT NULL,
+                FOREIGN KEY (UserId) REFERENCES Users(Id)
+            );
+
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserFriends' AND xtype='U')
+            CREATE TABLE UserFriends (
+                UserId INT NOT NULL,
+                FriendId INT NOT NULL,
+                FOREIGN KEY (UserId) REFERENCES Users(Id),
+                FOREIGN KEY (FriendId) REFERENCES Users(Id)
+            );";
+            _connection.Open();
+            command.ExecuteNonQuery();
+            _connection.Close();
+        }
+    }
+
     public void Connect()
     {
         if (_connection.State != System.Data.ConnectionState.Open)
@@ -39,5 +76,6 @@ public class MssqlService : IDatabaseService
             _connection.Close();
         }
     }
+
     public string ConnectionString => _connectionString;
 }

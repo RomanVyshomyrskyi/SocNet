@@ -1,4 +1,5 @@
 using System;
+using MongoDB.Driver;
 using My_SocNet_Win.Classes.DB.HANA;
 using My_SocNet_Win.Classes.DB.MongoDB;
 using My_SocNet_Win.Classes.DB.MSSQL;
@@ -11,59 +12,84 @@ namespace My_SocNet_Win;
 public class DatabaseConfigurator
 {
     // Configure the database services based on the database type
-    public static void ConfigureDatabaseServices(IServiceCollection services, IConfiguration configuration, string databaseType)
+    public static void ConfigureDatabase(IServiceCollection services, IConfiguration configuration, string databaseType)
     {
         switch (databaseType)
         {
-            case "MongoDb":
-                var mongoConnectionString = configuration.GetConnectionString("MongoDb");
-                if (string.IsNullOrEmpty(mongoConnectionString))
-                {
-                    throw new ArgumentNullException(nameof(mongoConnectionString), "MongoDb connection string cannot be null or empty.");
-                }
-                var mongoDbService = new MongoDbService(mongoConnectionString);
-                services.AddSingleton(mongoDbService);
-                services.AddSingleton<IUserRepository>(new MongoUserRepository(mongoDbService));
+            case "MongoDB":
+                var mongoConnectionString = configuration.GetConnectionString("MongoDB");
+                var mongoClient = new MongoClient(mongoConnectionString);
+                var mongoDatabase = mongoClient.GetDatabase("YourDatabaseName");
+                services.AddSingleton(mongoDatabase);
+                services.AddScoped<IUserRepository<MongoUsers>, MongoUserRepository>();
                 break;
             case "Redis":
                 var redisConnectionString = configuration.GetConnectionString("Redis");
-                if (string.IsNullOrEmpty(redisConnectionString))
-                {
-                    throw new ArgumentNullException(nameof(redisConnectionString), "Redis connection string cannot be null or empty.");
-                }
                 var redisService = new RedisService(redisConnectionString);
                 services.AddSingleton(redisService);
-                services.AddSingleton<IUserRepository>(new RedisUserRepository(redisService));
+                services.AddScoped<IUserRepository<RedisUsers>, RedisUserRepository>();
                 break;
             case "HANA":
                 var hanaConnectionString = configuration.GetConnectionString("HANA");
-                if (string.IsNullOrEmpty(hanaConnectionString))
-                {
-                    throw new ArgumentNullException(nameof(hanaConnectionString), "HANA connection string cannot be null or empty.");
-                }
                 var hanaService = new HanaService(hanaConnectionString);
                 services.AddSingleton(hanaService);
-                services.AddSingleton<IUserRepository>(new HanaUserRepository(hanaService));
+                services.AddScoped<IUserRepository<HanaUsers>, HanaUserRepository>();
                 break;
             case "Neo4J":
                 var neo4jConnectionString = configuration.GetConnectionString("Neo4J");
-                if (string.IsNullOrEmpty(neo4jConnectionString))
-                {
-                    throw new ArgumentNullException(nameof(neo4jConnectionString), "Neo4J connection string cannot be null or empty.");
-                }
                 var neo4jService = new Neo4jService(neo4jConnectionString);
                 services.AddSingleton(neo4jService);
-                services.AddSingleton<IUserRepository>(new Neo4jUserRepository(neo4jService));
+                services.AddScoped<IUserRepository<Neo4jUsers>, Neo4jUserRepository>();
                 break;
             case "MSSQL":
                 var mssqlConnectionString = configuration.GetConnectionString("MSSQL");
-                if (string.IsNullOrEmpty(mssqlConnectionString))
-                {
-                    throw new ArgumentNullException(nameof(mssqlConnectionString), "MSSQL connection string cannot be null or empty.");
-                }
                 var mssqlService = new MssqlService(mssqlConnectionString);
                 services.AddSingleton(mssqlService);
-                services.AddSingleton<IUserRepository, MssqlUserRepository>();
+                services.AddScoped<IUserRepository<SqlUsers>, SqlUserRepository>();
+                break;
+            default:
+                throw new Exception("Unsupported database type");
+        }
+    }
+
+     public static void EnsureAdminUserExists(IServiceProvider services, string databaseType)
+    {
+        switch (databaseType)
+        {
+            case "MongoDB":
+                var mongoUserRepository = services.GetService<IUserRepository<MongoUsers>>();
+                if (mongoUserRepository != null)
+                {
+                    mongoUserRepository.EnsureAdminExistsAsync().Wait();
+                }
+                break;
+            case "Redis":
+                var redisUserRepository = services.GetService<IUserRepository<RedisUsers>>();
+                if (redisUserRepository != null)
+                {
+                    redisUserRepository.EnsureAdminExistsAsync().Wait();
+                }
+                break;
+            case "HANA":
+                var hanaUserRepository = services.GetService<IUserRepository<HanaUsers>>();
+                if (hanaUserRepository != null)
+                {
+                    hanaUserRepository.EnsureAdminExistsAsync().Wait();
+                }
+                break;
+            case "Neo4J":
+                var neo4jUserRepository = services.GetService<IUserRepository<Neo4jUsers>>();
+                if (neo4jUserRepository != null)
+                {
+                    neo4jUserRepository.EnsureAdminExistsAsync().Wait();
+                }
+                break;
+            case "MSSQL":
+                var sqlUserRepository = services.GetService<IUserRepository<SqlUsers>>();
+                if (sqlUserRepository != null)
+                {
+                    sqlUserRepository.EnsureAdminExistsAsync().Wait();
+                }
                 break;
             default:
                 throw new Exception("Unsupported database type");
@@ -76,24 +102,4 @@ public class DatabaseConfigurator
         var configProvider = configRoot.Providers.First();
         configProvider.Set(key, value);
     }
-    public static void EnsureAdminUserExists(IServiceProvider serviceProvider)
-    {
-        using var scope = serviceProvider.CreateScope();
-        var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
-
-        var adminUser = userRepository.GetUserByUserNameAsync("admin").Result;
-        if (adminUser == null)
-        {
-            var newAdminUser = new Users
-            {
-                UserName = "admin",
-                Password = "adminpassword", // Make sure to hash the password in a real application
-                Roles = new List<string> { "Admin" },
-                DateOfCreation = DateTime.UtcNow,
-                LastLogin = DateTime.UtcNow
-            };
-            Users.InsertUserAsync(newAdminUser, serviceProvider).Wait();
-        }
-    }
-
 }

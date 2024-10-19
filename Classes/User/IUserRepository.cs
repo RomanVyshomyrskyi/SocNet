@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace My_SocNet_Win.Classes.User;
 
-public interface IUserRepository
+public interface IUserRepository<T> where T : BaseUsers
 {
-    Task<Users> GetUserByIdAsync(int id);
-    Task<Users> GetUserByUserNameAsync(string userName);
-    Task<bool> ValidateUserCredentialsAsync(string userName, string password);
-    Task CreateUserAsync(Users user);
-    Task<IEnumerable<Users>> GetAllUsersAsync();
-
+    Task<T> GetUserByIdAsync(string id);
+    Task<IEnumerable<T>> GetAllUsersAsync();
+    Task AddUserAsync(T user);
+    Task UpdateUserAsync(T user);
+    Task DeleteUserAsync(string id);
+    Task EnsureAdminExistsAsync();
 }
