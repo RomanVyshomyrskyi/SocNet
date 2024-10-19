@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("My_SocNet_Win")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22415aebe216095be8b2c4a4c60b4961aa3d3091")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+205a0d382e395c007b5501f7c33e32042789964b")]
 [assembly: System.Reflection.AssemblyProductAttribute("My_SocNet_Win")]
 [assembly: System.Reflection.AssemblyTitleAttribute("My_SocNet_Win")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

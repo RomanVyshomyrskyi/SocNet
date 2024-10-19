@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\My_SocNet_Win.props" />
-</Project>
