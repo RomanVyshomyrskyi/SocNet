@@ -25,6 +25,11 @@ public class Neo4jUserRepository : IUserRepository<Neo4jUsers>
         throw new NotImplementedException();
     }
 
+    public Task<Neo4jUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Neo4jUsers> GetUserByIdAsync(string id)
     {
         throw new NotImplementedException();

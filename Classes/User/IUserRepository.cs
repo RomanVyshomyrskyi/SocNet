@@ -12,4 +12,6 @@ public interface IUserRepository<T> where T : BaseUsers
     Task UpdateUserAsync(T user);
     Task DeleteUserAsync(string id);
     Task EnsureAdminExistsAsync();
+    Task<T> GetUserByEmailAndPasswordAsync(string email, string password);
+    
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using My_SocNet_Win.Classes;
+using My_SocNet_Win.Classes.DB;
 using My_SocNet_Win.Classes.User;
 
 namespace My_SocNet_Win.Pages;
@@ -17,6 +18,7 @@ public class IndexModel : PageModel
         _siteSettings = siteSettings.Value;
         _serviceProvider = serviceProvider;
     }
+    public BaseUsers? CurrentUser { get; set; }
 
     public void OnGet()
     {

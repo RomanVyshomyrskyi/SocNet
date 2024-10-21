@@ -1,5 +1,6 @@
 using My_SocNet_Win;
 using My_SocNet_Win.Classes;
+using My_SocNet_Win.Classes.DB;
 using My_SocNet_Win.Classes.User;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,11 +27,27 @@ DatabaseConfigurator.ConfigureDatabase(builder.Services, builder.Configuration, 
 //Build the app
 var app = builder.Build();
 
+// Ensure the database is created
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var databaseService = services.GetRequiredService<IDatabaseService>();
+        databaseService.EnsureDatabaseCreated();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred creating the DB.");
+    }
+}
+
 // Ensure the database and admin user exist
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    DatabaseConfigurator.EnsureAdminUserExists(services, databaseType);
+     DatabaseConfigurator.EnsureAdminUserExists(services, databaseType);
 }
 
 // Configure the HTTP request pipeline.

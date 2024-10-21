@@ -1,0 +1,51 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+services:
+  mysocnetwin:
+    image: mysocnetwin
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - configuration=Debug
+    ports:
+      - 5051:5051
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - C:\Users\vroma\.vsdbg:C:\remote_debugger:rw
+    depends_on:
+      - mssql
+      - mongodb
+      - neo4j
+      - redis
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "Qaz1wsx2!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - 1433:1433
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
+  neo4j:
+    image: neo4j:latest
+    ports:
+      - 7474:7474
+      - 7687:7687
+    environment:
+      NEO4J_AUTH: "neo4j/your_password"
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+volumes:
+  mongo-data:

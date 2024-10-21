@@ -49,4 +49,9 @@ public class MongoUserRepository : IUserRepository<MongoUsers>
     {
         throw new NotImplementedException();
     }
+
+    public Task<MongoUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+    {
+        throw new NotImplementedException();
+    }
 }

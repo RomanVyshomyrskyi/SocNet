@@ -25,6 +25,11 @@ public class HanaUserRepository : IUserRepository<HanaUsers>
         throw new NotImplementedException();
     }
 
+    public Task<HanaUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<HanaUsers> GetUserByIdAsync(string id)
     {
         throw new NotImplementedException();

@@ -26,6 +26,11 @@ public class RedisUserRepository : IUserRepository<RedisUsers>
         throw new NotImplementedException();
     }
 
+    public Task<RedisUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<RedisUsers> GetUserByIdAsync(string id)
     {
         throw new NotImplementedException();
