@@ -31,23 +31,24 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    try
-    {
-        var databaseService = services.GetRequiredService<IDatabaseService>();
-        databaseService.EnsureDatabaseCreated();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred creating the DB.");
-    }
+    
 }
 
 // Ensure the database and admin user exist
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-     DatabaseConfigurator.EnsureAdminUserExists(services, databaseType);
+    try
+    {
+        var databaseService = services.GetRequiredService<IDatabaseService>();
+        databaseService.EnsureDatabaseCreated();
+        DatabaseConfigurator.EnsureAdminUserExists(services, databaseType);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred creating the DB.");
+    }
 }
 
 // Configure the HTTP request pipeline.

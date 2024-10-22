@@ -12,12 +12,12 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
-      - C:\Users\vroma\.vsdbg:C:\remote_debugger:rw
+      - C:\Users\vroma\.vsdbg:/remote_debugger:rw
     depends_on:
       - mssql
-      - mongodb
-      - neo4j
-      - redis
+      # - mongodb
+      # - neo4j
+      # - redis
 
   mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
