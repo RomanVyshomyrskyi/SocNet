@@ -40,3 +40,19 @@ body {
 .form-floating>.form-control:focus::placeholder {
   text-align: start;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+  gap: 10px;
+  padding: 10px;
+}
+
+.post-bg {
+  background-color: #41474f;
+
+  grid-column: 3 / span 6;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+}

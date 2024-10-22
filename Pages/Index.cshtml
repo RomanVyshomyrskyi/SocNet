@@ -4,6 +4,18 @@
     ViewData["Title"] = "Home page";
 }
 
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    
+    @if(User.Identity.IsAuthenticated){
+
+    }else{
+        <h1 class="display-4">Welcome</h1>
+        <h2>This page is main page of @ViewData["Name"]</h2>
+        <p>
+            This Social network was created as a project for my studies.
+            <br>
+            You can see all data after logging in.
+        </p>
+    }
 </div>
