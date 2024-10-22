@@ -1,5 +1,6 @@
 using System;
 using MongoDB.Driver;
+using My_SocNet_Win.Classes.DB;
 using My_SocNet_Win.Classes.DB.HANA;
 using My_SocNet_Win.Classes.DB.MongoDB;
 using My_SocNet_Win.Classes.DB.MSSQL;
@@ -21,34 +22,40 @@ public class DatabaseConfigurator
                 var mongoClient = new MongoClient(mongoConnectionString);
                 var mongoDatabase = mongoClient.GetDatabase("YourDatabaseName");
                 services.AddSingleton(mongoDatabase);
-                services.AddScoped<IUserRepository<MongoUsers>, MongoUserRepository>();
+                services.AddScoped<IUserRepository<BaseUsers>, MongoUserRepository>();
+                services.AddScoped<IDatabaseService, MongoDbService>();
                 break;
             case "Redis":
                 var redisConnectionString = configuration.GetConnectionString("Redis");
                 var redisService = new RedisService(redisConnectionString);
                 services.AddSingleton(redisService);
-                services.AddScoped<IUserRepository<RedisUsers>, RedisUserRepository>();
+                services.AddScoped<IUserRepository<BaseUsers>, RedisUserRepository>();
+                services.AddScoped<IDatabaseService, RedisService>();
                 break;
             case "HANA":
                 var hanaConnectionString = configuration.GetConnectionString("HANA");
                 var hanaService = new HanaService(hanaConnectionString);
                 services.AddSingleton(hanaService);
-                services.AddScoped<IUserRepository<HanaUsers>, HanaUserRepository>();
+                services.AddScoped<IUserRepository<BaseUsers>, HanaUserRepository>();
+                services.AddScoped<IDatabaseService, HanaService>();
                 break;
             case "Neo4J":
                 var neo4jConnectionString = configuration.GetConnectionString("Neo4J");
                 var neo4jService = new Neo4jService(neo4jConnectionString);
                 services.AddSingleton(neo4jService);
-                services.AddScoped<IUserRepository<Neo4jUsers>, Neo4jUserRepository>();
+                services.AddScoped<IUserRepository<BaseUsers>, Neo4jUserRepository>();
+                services.AddScoped<IDatabaseService, Neo4jService>();
                 break;
             case "MSSQL":
                 var mssqlConnectionString = configuration.GetConnectionString("MSSQL");
                 var mssqlService = new MssqlService(mssqlConnectionString);
                 services.AddSingleton(mssqlService);
-                services.AddScoped<IUserRepository<SqlUsers>, SqlUserRepository>();
+                services.AddScoped<IDatabaseService>(provider => provider.GetRequiredService<MssqlService>());
+                services.AddScoped<IUserRepository<BaseUsers>, SqlUserRepository>(provider => 
+                    new SqlUserRepository(provider.GetRequiredService<MssqlService>()));
                 break;
             default:
-                throw new Exception("Unsupported database type");
+                throw new ArgumentException($"Unsupported database type: {databaseType}");
         }
     }
 

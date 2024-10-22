@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using My_SocNet_Win;
 using My_SocNet_Win.Classes;
 using My_SocNet_Win.Classes.DB;
@@ -7,6 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Add authentication services
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/SignInUP";
+        options.LogoutPath = "/SignOut";
+    });
+
 
 //Add configuration from appsettings.json
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -38,17 +48,17 @@ using (var scope = app.Services.CreateScope())
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    try
-    {
+    // try
+    // {
         var databaseService = services.GetRequiredService<IDatabaseService>();
         databaseService.EnsureDatabaseCreated();
         DatabaseConfigurator.EnsureAdminUserExists(services, databaseType);
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred creating the DB.");
-    }
+    //}
+    // catch (Exception ex)
+    // {
+    //     var logger = services.GetRequiredService<ILogger<Program>>();
+    //     logger.LogError(ex, "An error occurred creating the DB.");
+    // }
 }
 
 // Configure the HTTP request pipeline.
@@ -63,6 +73,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Add this line to enable authentication
 app.UseAuthorization();
 
 app.MapStaticAssets();

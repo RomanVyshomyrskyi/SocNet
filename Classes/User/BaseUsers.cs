@@ -20,8 +20,6 @@ public abstract class BaseUsers : GetDBType
 public class MongoUsers : BaseUsers
 {
     // MongoDB-specific properties or methods
-
-    
 }
 
 public class RedisUsers : BaseUsers
@@ -42,4 +40,9 @@ public class Neo4jUsers : BaseUsers
 public class SqlUsers : BaseUsers
 {
     // MSSQL-specific properties or methods
+}
+
+public class ConcreteUser : BaseUsers
+{
+    // No additional properties or methods needed
 }

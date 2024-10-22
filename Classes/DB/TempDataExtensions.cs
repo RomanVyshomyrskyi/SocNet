@@ -11,7 +11,7 @@ public static class TempDataExtensions
         tempData[key] = JsonSerializer.Serialize(value);
     }
 
-    public static T Get<T>(this ITempDataDictionary tempData, string key) where T : class
+    public static T? Get<T>(this ITempDataDictionary tempData, string key) where T : class
     {
         tempData.TryGetValue(key, out var obj);
         return obj == null ? null : JsonSerializer.Deserialize<T>((string)obj);

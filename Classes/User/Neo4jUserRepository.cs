@@ -2,10 +2,10 @@ using System;
 
 namespace My_SocNet_Win.Classes.User;
 
-public class Neo4jUserRepository : IUserRepository<Neo4jUsers>
+public class Neo4jUserRepository : IUserRepository<BaseUsers>
 {
     //TODO: Implement Neo4j-specific methods
-    public Task AddUserAsync(Neo4jUsers user)
+    public Task AddUserAsync(BaseUsers user)
     {
         throw new NotImplementedException();
     }
@@ -20,22 +20,22 @@ public class Neo4jUserRepository : IUserRepository<Neo4jUsers>
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Neo4jUsers>> GetAllUsersAsync()
+    public Task<IEnumerable<BaseUsers>> GetAllUsersAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<Neo4jUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+    public Task<BaseUsers> GetUserByEmailAndPasswordAsync(string email, string password)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Neo4jUsers> GetUserByIdAsync(string id)
+    public Task<BaseUsers> GetUserByIdAsync(string id)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateUserAsync(Neo4jUsers user)
+    public Task UpdateUserAsync(BaseUsers user)
     {
         throw new NotImplementedException();
     }

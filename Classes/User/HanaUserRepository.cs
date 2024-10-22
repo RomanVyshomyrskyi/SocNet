@@ -2,10 +2,10 @@ using System;
 
 namespace My_SocNet_Win.Classes.User;
 
-public class HanaUserRepository : IUserRepository<HanaUsers>
+public class HanaUserRepository : IUserRepository<BaseUsers>
 {
     //TODO: Implement HANA-specific methods
-    public Task AddUserAsync(HanaUsers user)
+    public Task AddUserAsync(BaseUsers user)
     {
         throw new NotImplementedException();
     }
@@ -20,22 +20,22 @@ public class HanaUserRepository : IUserRepository<HanaUsers>
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<HanaUsers>> GetAllUsersAsync()
+    public Task<IEnumerable<BaseUsers>> GetAllUsersAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<HanaUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+    public Task<BaseUsers> GetUserByEmailAndPasswordAsync(string email, string password)
     {
         throw new NotImplementedException();
     }
 
-    public Task<HanaUsers> GetUserByIdAsync(string id)
+    public Task<BaseUsers> GetUserByIdAsync(string id)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateUserAsync(HanaUsers user)
+    public Task UpdateUserAsync(BaseUsers user)
     {
         throw new NotImplementedException();
     }
