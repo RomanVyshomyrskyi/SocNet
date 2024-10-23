@@ -47,19 +47,28 @@ namespace My_SocNet_Win.Pages
             if (dbUser != null)
             {
                 CurrentUser = UserConverter.ConvertToBaseUser(dbUser);
-
+                #region Claims (save Data in Cookie)
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, CurrentUser.UserName),
-                    new Claim(ClaimTypes.Email, CurrentUser.Email)
+                    new Claim(ClaimTypes.Email, CurrentUser.Email),
+                    
                 };
+                foreach (var role in CurrentUser.Roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+                foreach (var friend in CurrentUser.Friends)
+                {
+                    claims.Add(new Claim("Friend", friend.ToString()));
+                }
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var authProperties = new AuthenticationProperties
                 {
                     IsPersistent = true
                 };
-
+                #endregion
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
                 return Redirect("/Index");

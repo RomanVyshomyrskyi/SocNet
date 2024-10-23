@@ -64,35 +64,35 @@ public class DatabaseConfigurator
         switch (databaseType)
         {
             case "MongoDB":
-                var mongoUserRepository = services.GetService<IUserRepository<MongoUsers>>();
+                var mongoUserRepository = services.GetService<IUserRepository<BaseUsers>>();
                 if (mongoUserRepository != null)
                 {
                     mongoUserRepository.EnsureAdminExistsAsync().Wait();
                 }
                 break;
             case "Redis":
-                var redisUserRepository = services.GetService<IUserRepository<RedisUsers>>();
+                var redisUserRepository = services.GetService<IUserRepository<BaseUsers>>();
                 if (redisUserRepository != null)
                 {
                     redisUserRepository.EnsureAdminExistsAsync().Wait();
                 }
                 break;
             case "HANA":
-                var hanaUserRepository = services.GetService<IUserRepository<HanaUsers>>();
+                var hanaUserRepository = services.GetService<IUserRepository<BaseUsers>>();
                 if (hanaUserRepository != null)
                 {
                     hanaUserRepository.EnsureAdminExistsAsync().Wait();
                 }
                 break;
             case "Neo4J":
-                var neo4jUserRepository = services.GetService<IUserRepository<Neo4jUsers>>();
+                var neo4jUserRepository = services.GetService<IUserRepository<BaseUsers>>();
                 if (neo4jUserRepository != null)
                 {
                     neo4jUserRepository.EnsureAdminExistsAsync().Wait();
                 }
                 break;
             case "MSSQL":
-                var sqlUserRepository = services.GetService<IUserRepository<SqlUsers>>();
+                var sqlUserRepository = services.GetService<IUserRepository<BaseUsers>>();
                 if (sqlUserRepository != null)
                 {
                     sqlUserRepository.EnsureAdminExistsAsync().Wait();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
@@ -24,10 +25,13 @@ public class PrivacyModel : PageModel
 
     public void OnGet()
     {
+        var roleClaims = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
         CurrentUser = new ConcreteUser
         {
             UserName = User.Identity.Name,
-            Password = "" // Set the Password property as required
+            Password = "",
+            Roles = roleClaims
+
         };
         ViewData["Title"] = _siteSettings.Title;
         ViewData["Name"] = _siteSettings.Name;

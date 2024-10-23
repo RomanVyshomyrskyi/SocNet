@@ -7,5 +7,12 @@
 
 <h2>User Information</h2>
 <p><strong>Username:</strong> @Model.CurrentUser.UserName</p>
+<h4>Roles:</h4>
+@{
+    foreach (var role in Model.CurrentUser.Roles)
+    {
+        <p><strong>@role:</strong></p>
+    }
+}
 
 <p>Use this page to detail your site's privacy policy.</p>
