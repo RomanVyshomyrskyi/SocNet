@@ -8,6 +8,8 @@ using My_SocNet_Win.Classes.Converters;
 using My_SocNet_Win.Classes.DB;
 using My_SocNet_Win.Classes.User;
 using System.Security.Claims;
+using System.Text.Json;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace My_SocNet_Win.Pages
 {
@@ -16,12 +18,15 @@ namespace My_SocNet_Win.Pages
         private readonly ILogger<SignInUPModel> _logger;
         private readonly SiteSettings _siteSettings;
         private readonly IUserRepository<BaseUsers> _userRepository;
+        private readonly IDistributedCache _cache;
 
-        public SignInUPModel(ILogger<SignInUPModel> logger, IOptions<SiteSettings> siteSettings, IUserRepository<BaseUsers> userRepository)
+        public SignInUPModel(ILogger<SignInUPModel> logger, IOptions<SiteSettings> siteSettings,
+                                 IUserRepository<BaseUsers> userRepository, IDistributedCache cache) 
         {
             _logger = logger;
             _siteSettings = siteSettings.Value;
             _userRepository = userRepository;
+            _cache = cache;
         }
         
         public ConcreteUser? CurrentUser { get; set; }
@@ -43,36 +48,50 @@ namespace My_SocNet_Win.Pages
 
         public async Task<IActionResult> OnPostLogIn(string logemail, string logpass)
         {
-            var dbUser = await _userRepository.GetUserByEmailAndPasswordAsync(logemail, logpass);
-            if (dbUser != null)
+            var cacheKey = $"user_{logemail}";
+            var cachedUser = await _cache.GetStringAsync(cacheKey);
+
+            if (cachedUser != null)
             {
-                CurrentUser = UserConverter.ConvertToBaseUser(dbUser);
+                CurrentUser = JsonSerializer.Deserialize<ConcreteUser>(cachedUser);
+            }
+            else
+            {
+                var dbUser = await _userRepository.GetUserByEmailAndPasswordAsync(logemail, logpass);
+                if (dbUser != null)
+                {
+                    CurrentUser = UserConverter.ConvertToBaseUser(dbUser);
+                    var serializedUser = JsonSerializer.Serialize(CurrentUser);
+                    await _cache.SetStringAsync(cacheKey, serializedUser, new DistributedCacheEntryOptions
+                    {
+                        //TODO: Try to set strategy disine patern to for cache expiration (Can be done in 3 strategies: Minets, Hours, Days)
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(3) // Set user cache expiration time (3h in this case)
+                        
+                    });
+                }
+            }
+
+            if (CurrentUser != null)
+            {
                 #region Claims (save Data in Cookie)
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, CurrentUser.UserName),
-                    new Claim(ClaimTypes.Email, CurrentUser.Email),
-                    
+                    new Claim(ClaimTypes.Email, CurrentUser.Email)
                 };
-                foreach (var role in CurrentUser.Roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role));
-                }
-                foreach (var friend in CurrentUser.Friends)
-                {
-                    claims.Add(new Claim("Friend", friend.ToString()));
-                }
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var authProperties = new AuthenticationProperties
                 {
                     IsPersistent = true
                 };
-                #endregion
+
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                #endregion
 
                 return Redirect("/Index");
             }
+
             return Page();
         }
 

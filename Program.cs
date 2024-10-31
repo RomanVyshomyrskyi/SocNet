@@ -26,9 +26,16 @@ builder.Services.Configure<SiteSettings>(builder.Configuration.GetSection("SiteS
 // Get the database type from the configuration (appsettings.json)
 var databaseType = builder.Configuration.GetValue<string>("DatabaseType");
 
-if (string.IsNullOrEmpty(databaseType))
+var chesheType = builder.Configuration.GetValue<string>("ChesheType"); // Add this line to get the cache type from the configuration
+
+if (string.IsNullOrEmpty(databaseType)) // Check if the database type is missing or empty
 {
     throw new ArgumentNullException(nameof(databaseType), "DatabaseType configuration is missing or empty.");
+}
+
+if(string.IsNullOrEmpty(chesheType)) // Add this line to check if the cache type is missing or empty
+{
+    throw new ArgumentNullException(nameof(chesheType), "ChesheType configuration is missing or empty.");
 }
 
 DatabaseConfigurator.ConfigureDatabase(builder.Services, builder.Configuration, databaseType);
