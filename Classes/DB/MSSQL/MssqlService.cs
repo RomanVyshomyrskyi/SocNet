@@ -74,6 +74,23 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
                             FriendId INT NOT NULL,
                             FOREIGN KEY (UserId) REFERENCES Users(Id),
                             FOREIGN KEY (FriendId) REFERENCES Users(Id)
+                        );
+                        
+                        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='BasePosts' AND xtype='U')
+                        CREATE TABLE BasePosts (
+                            ID INT PRIMARY KEY,
+                            CreatorID INT NOT NULL,
+                            Text NVARCHAR(MAX),
+                            IsDeleted BIT NOT NULL DEFAULT 0,
+                            FOREIGN KEY (CreatorID) REFERENCES Users(Id)
+                        );
+
+                        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PostImages' AND xtype='U')
+                        CREATE TABLE PostImages (
+                            ID INT PRIMARY KEY IDENTITY,
+                            PostID INT NOT NULL,
+                            Image VARBINARY(MAX),
+                            FOREIGN KEY (PostID) REFERENCES BasePosts(ID)
                         );";
                         command.ExecuteNonQuery();
                     }

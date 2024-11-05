@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using My_SocNet_Win.Classes.DB.MSSQL;
 using My_SocNet_Win.Classes.User;
+using My_SocNet_Win.Classes.Posts;
 
 namespace My_SocNet_Win.Classes.DB.Strategies
 {
@@ -19,6 +20,8 @@ namespace My_SocNet_Win.Classes.DB.Strategies
             services.AddScoped<IDatabaseService>(provider => provider.GetRequiredService<MssqlService>());
             services.AddScoped<IUserRepository<BaseUsers>, SqlUserRepository>(provider => 
                 new SqlUserRepository(provider.GetRequiredService<MssqlService>()));
+            services.AddScoped<IPostReposetory<BasePost>, SQLPostReposetory>(provider =>
+                new SQLPostReposetory(provider.GetRequiredService<MssqlService>()));
         }
 
         public void EnsureAdminUserExists(IServiceProvider services)
