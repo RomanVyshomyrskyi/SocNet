@@ -35,12 +35,25 @@ namespace My_SocNet_Win.Pages
         {
             if (User.Identity.IsAuthenticated)
             {
-                CurrentUser = new ConcreteUser
+                var claimsCacheKey = $"claims_{User.Identity.Name}";
+                var cachedClaims = _cache.GetString(claimsCacheKey);
+
+                if (cachedClaims != null)
                 {
-                    UserName = User.Identity.Name,
-                    Password = string.Empty // Set an appropriate default or fetched password here
-                };
-                Redirect("/Index");
+                    var claims = JsonSerializer.Deserialize<List<Claim>>(cachedClaims);
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    HttpContext.User = new ClaimsPrincipal(claimsIdentity);
+                    Redirect("/Index");
+                }
+                else
+                {
+                    CurrentUser = new ConcreteUser
+                    {
+                        UserName = User.Identity.Name,
+                        Password = string.Empty // Set an appropriate default or fetched password here
+                    };
+                    Redirect("/Index");
+                }
             }
             ViewData["SiteName"] = _siteSettings.Name;
             ViewData["Version"] = _siteSettings.Version;
@@ -64,9 +77,7 @@ namespace My_SocNet_Win.Pages
                     var serializedUser = JsonSerializer.Serialize(CurrentUser);
                     await _cache.SetStringAsync(cacheKey, serializedUser, new DistributedCacheEntryOptions
                     {
-                        //TODO: Try to set strategy disine patern to for cache expiration (Can be done in 3 strategies: Minets, Hours, Days)
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(3) // Set user cache expiration time (3h in this case)
-                        
                     });
                 }
             }
@@ -87,6 +98,14 @@ namespace My_SocNet_Win.Pages
                 };
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                // Cache claims data
+                var claimsCacheKey = $"claims_{logemail}";
+                var serializedClaims = JsonSerializer.Serialize(claims);
+                await _cache.SetStringAsync(claimsCacheKey, serializedClaims, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(3) // Set claims cache expiration time (3h in this case)
+                });
                 #endregion
 
                 return Redirect("/Index");
