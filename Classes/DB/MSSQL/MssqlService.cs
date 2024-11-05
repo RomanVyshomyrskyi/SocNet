@@ -89,7 +89,12 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
                             CreatorID INT NOT NULL,
                             Text NVARCHAR(MAX),
                             IsDeleted BIT NOT NULL DEFAULT 0,
-                            FOREIGN KEY (CreatorID) REFERENCES Users(Id)
+                            LastCreatorPostID INT,
+                            DateOfCreation DATETIME NOT NULL,
+                            Likes INT NOT NULL DEFAULT 0,
+                            Dislikes INT NOT NULL DEFAULT 0,
+                            FOREIGN KEY (CreatorID) REFERENCES Users(Id),
+                            FOREIGN KEY (LastCreatorPostID) REFERENCES BasePosts(ID)
                         );
 
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PostImages' AND xtype='U')

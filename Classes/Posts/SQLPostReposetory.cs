@@ -4,229 +4,262 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using My_SocNet_Win.Classes.DB.MSSQL;
 
-namespace My_SocNet_Win.Classes.Posts;
-
-public class SQLPostReposetory : IPostReposetory<BasePost>
+namespace My_SocNet_Win.Classes.Posts
 {
-    private readonly MssqlService _mssqlService;
-    public SQLPostReposetory(MssqlService mssqlService)
+    public class SQLPostReposetory : IPostRepository<BasePost>
     {
-        _mssqlService = mssqlService;
-    }
-
-
-    public async Task<BasePost> CreatePost(BasePost post)
-    {
-        using (var connection = _mssqlService.GetConnection())
+        private readonly MssqlService _mssqlService;
+        public SQLPostReposetory(MssqlService mssqlService)
         {
-            await connection.OpenAsync();
-            using (var transaction = connection.BeginTransaction())
-            {
-                try
-                {
-                    var command = connection.CreateCommand();
-                    command.Transaction = transaction;
-                    command.CommandText = @"
-                        INSERT INTO BasePosts (CreatorID, Text, IsDeleted)
-                        VALUES (@CreatorID, @Text, @IsDeleted);
-                        SELECT SCOPE_IDENTITY();";
-                    command.Parameters.AddWithValue("@CreatorID", post.CreatorID);
-                    command.Parameters.AddWithValue("@Text", post.Text);
-                    command.Parameters.AddWithValue("@IsDeleted", post.IsDeleted);
-
-                    post.ID = Convert.ToInt32(await command.ExecuteScalarAsync());
-
-                    foreach (var image in post.Images)
-                    {
-                        var imageCommand = connection.CreateCommand();
-                        imageCommand.Transaction = transaction;
-                        imageCommand.CommandText = @"
-                            INSERT INTO PostImages (PostID, Image)
-                            VALUES (@PostID, @Image);";
-                        imageCommand.Parameters.AddWithValue("@PostID", post.ID);
-                        imageCommand.Parameters.AddWithValue("@Image", image);
-                        await imageCommand.ExecuteNonQueryAsync();
-                    }
-
-                    transaction.Commit();
-                    return post;
-                }
-                catch
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-            }
+            _mssqlService = mssqlService;
         }
-    }
 
-    public async Task<BasePost> DeletePost(Guid id)
-    {
-        using (var connection = _mssqlService.GetConnection())
+        public async Task<BasePost> CreatePost(BasePost post)
         {
-            await connection.OpenAsync();
-            var command = connection.CreateCommand();
-            command.CommandText = @"
-                UPDATE BasePosts
-                SET IsDeleted = 1
-                WHERE ID = @ID;";
-            command.Parameters.AddWithValue("@ID", id);
-
-            await command.ExecuteNonQueryAsync();
-            return await GetPost(id);
-        }
-    }
-
-    public async Task<BasePost> GetPost(Guid id)
-    {
-        using (var connection = _mssqlService.GetConnection())
-        {
-            await connection.OpenAsync();
-            var command = connection.CreateCommand();
-            command.CommandText = @"
-                SELECT ID, CreatorID, Text, IsDeleted
-                FROM BasePosts
-                WHERE ID = @ID;";
-            command.Parameters.AddWithValue("@ID", id);
-
-            using (var reader = await command.ExecuteReaderAsync())
+            using (var connection = _mssqlService.GetConnection())
             {
-                if (await reader.ReadAsync())
+                await connection.OpenAsync();
+                using (var transaction = connection.BeginTransaction())
                 {
-                    var post = new Post
+                    try
                     {
-                        ID = reader.GetInt32(0),
-                        CreatorID = reader.GetInt32(1),
-                        Text = reader.GetString(2),
-                        IsDeleted = reader.GetBoolean(3),
-                        Images = new List<byte[]>()
-                    };
+                        // Get the last post ID created by the user
+                        var lastPostCommand = connection.CreateCommand();
+                        lastPostCommand.Transaction = transaction;
+                        lastPostCommand.CommandText = @"
+                            SELECT TOP 1 ID
+                            FROM BasePosts
+                            WHERE CreatorID = @CreatorID
+                            ORDER BY DateOfCreation DESC";
+                        lastPostCommand.Parameters.AddWithValue("@CreatorID", post.CreatorID);
 
-                    var imageCommand = connection.CreateCommand();
-                    imageCommand.CommandText = @"
-                        SELECT Image
-                        FROM PostImages
-                        WHERE PostID = @PostID;";
-                    imageCommand.Parameters.AddWithValue("@PostID", post.ID);
+                        var lastPostId = await lastPostCommand.ExecuteScalarAsync();
+                        post.LastCreatorPostID = lastPostId != null ? Convert.ToInt32(lastPostId) : 0;
 
-                    using (var imageReader = await imageCommand.ExecuteReaderAsync())
-                    {
-                        while (await imageReader.ReadAsync())
+                        var command = connection.CreateCommand();
+                        command.Transaction = transaction;
+                        command.CommandText = @"
+                            INSERT INTO BasePosts (CreatorID, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes)
+                            VALUES (@CreatorID, @Text, @IsDeleted, @LastCreatorPostID, @DateOfCreation, @Likes, @Dislikes);
+                            SELECT SCOPE_IDENTITY();";
+                        command.Parameters.AddWithValue("@CreatorID", post.CreatorID);
+                        command.Parameters.AddWithValue("@Text", post.Text);
+                        command.Parameters.AddWithValue("@IsDeleted", post.IsDeleted);
+                        command.Parameters.AddWithValue("@LastCreatorPostID", post.LastCreatorPostID);
+                        command.Parameters.AddWithValue("@DateOfCreation", post.DateOfCreation);
+                        command.Parameters.AddWithValue("@Likes", post.Likes);
+                        command.Parameters.AddWithValue("@Dislikes", post.Dislikes);
+
+                        post.ID = Convert.ToInt32(await command.ExecuteScalarAsync());
+
+                        foreach (var image in post.Images)
                         {
-                            post.Images.Add((byte[])imageReader["Image"]);
+                            var imageCommand = connection.CreateCommand();
+                            imageCommand.Transaction = transaction;
+                            imageCommand.CommandText = @"
+                                INSERT INTO PostImages (PostID, Image)
+                                VALUES (@PostID, @Image);";
+                            imageCommand.Parameters.AddWithValue("@PostID", post.ID);
+                            imageCommand.Parameters.AddWithValue("@Image", image);
+                            await imageCommand.ExecuteNonQueryAsync();
                         }
-                    }
 
-                    return post;
-                }
-                else
-                {
-                    return null;
+                        transaction.Commit();
+                        return post;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
             }
         }
-    }
 
-    public async Task<List<BasePost>> GetPosts(int count)
-    {
-        using (var connection = _mssqlService.GetConnection())
+        public async Task<BasePost> DeletePost(Guid id)
         {
-            await connection.OpenAsync();
-            var command = connection.CreateCommand();
-            command.CommandText = @"
-                SELECT TOP (@Count) ID, CreatorID, Text, IsDeleted
-                FROM BasePosts
-                WHERE IsDeleted = 0
-                ORDER BY ID DESC;";
-            command.Parameters.AddWithValue("@Count", count);
-
-            var posts = new List<BasePost>();
-            using (var reader = await command.ExecuteReaderAsync())
+            using (var connection = _mssqlService.GetConnection())
             {
-                while (await reader.ReadAsync())
+                await connection.OpenAsync();
+                var command = connection.CreateCommand();
+                command.CommandText = @"
+                    UPDATE BasePosts
+                    SET IsDeleted = 1
+                    WHERE ID = @ID;";
+                command.Parameters.AddWithValue("@ID", id);
+
+                await command.ExecuteNonQueryAsync();
+                return await GetPost(id);
+            }
+        }
+
+        public async Task<BasePost> GetPost(Guid id)
+        {
+            using (var connection = _mssqlService.GetConnection())
+            {
+                await connection.OpenAsync();
+                var command = connection.CreateCommand();
+                command.CommandText = @"
+                    SELECT ID, CreatorID, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes
+                    FROM BasePosts
+                    WHERE ID = @ID;";
+                command.Parameters.AddWithValue("@ID", id);
+
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    var post = new Post
+                    if (await reader.ReadAsync())
                     {
-                        ID = reader.GetInt32(0),
-                        CreatorID = reader.GetInt32(1),
-                        Text = reader.GetString(2),
-                        IsDeleted = reader.GetBoolean(3),
-                        Images = new List<byte[]>()
-                    };
-
-                    var imageCommand = connection.CreateCommand();
-                    imageCommand.CommandText = @"
-                        SELECT Image
-                        FROM PostImages
-                        WHERE PostID = @PostID;";
-                    imageCommand.Parameters.AddWithValue("@PostID", post.ID);
-
-                    using (var imageReader = await imageCommand.ExecuteReaderAsync())
-                    {
-                        while (await imageReader.ReadAsync())
+                        var post = new Post
                         {
-                            post.Images.Add((byte[])imageReader["Image"]);
-                        }
-                    }
+                            ID = reader.GetInt32(0),
+                            CreatorID = reader.GetInt32(1),
+                            Text = reader.GetString(2),
+                            IsDeleted = reader.GetBoolean(3),
+                            LastCreatorPostID = reader.GetInt32(4),
+                            DateOfCreation = reader.GetDateTime(5),
+                            Likes = reader.GetInt32(6),
+                            Dislikes = reader.GetInt32(7),
+                            Images = new List<byte[]>()
+                        };
 
-                    posts.Add(post);
+                        var imageCommand = connection.CreateCommand();
+                        imageCommand.CommandText = @"
+                            SELECT Image
+                            FROM PostImages
+                            WHERE PostID = @PostID;";
+                        imageCommand.Parameters.AddWithValue("@PostID", post.ID);
+
+                        using (var imageReader = await imageCommand.ExecuteReaderAsync())
+                        {
+                            while (await imageReader.ReadAsync())
+                            {
+                                post.Images.Add((byte[])imageReader["Image"]);
+                            }
+                        }
+
+                        return post;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
+        }
 
-            return posts;
+        public async Task<List<BasePost>> GetPosts(int count)
+        {
+            using (var connection = _mssqlService.GetConnection())
+            {
+                await connection.OpenAsync();
+                var command = connection.CreateCommand();
+                command.CommandText = @"
+                    SELECT TOP (@Count) ID, CreatorID, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes
+                    FROM BasePosts
+                    WHERE IsDeleted = 0
+                    ORDER BY ID DESC;";
+                command.Parameters.AddWithValue("@Count", count);
+
+                var posts = new List<BasePost>();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        var post = new Post
+                        {
+                            ID = reader.GetInt32(0),
+                            CreatorID = reader.GetInt32(1),
+                            Text = reader.GetString(2),
+                            IsDeleted = reader.GetBoolean(3),
+                            LastCreatorPostID = reader.GetInt32(4),
+                            DateOfCreation = reader.GetDateTime(5),
+                            Likes = reader.GetInt32(6),
+                            Dislikes = reader.GetInt32(7),
+                            Images = new List<byte[]>()
+                        };
+
+                        var imageCommand = connection.CreateCommand();
+                        imageCommand.CommandText = @"
+                            SELECT Image
+                            FROM PostImages
+                            WHERE PostID = @PostID;";
+                        imageCommand.Parameters.AddWithValue("@PostID", post.ID);
+
+                        using (var imageReader = await imageCommand.ExecuteReaderAsync())
+                        {
+                            while (await imageReader.ReadAsync())
+                            {
+                                post.Images.Add((byte[])imageReader["Image"]);
+                            }
+                        }
+
+                        posts.Add(post);
+                    }
+                }
+
+                return posts;
+            }
+        }
+
+        public async Task<BasePost> UpdatePost(BasePost post)
+        {
+            using (var connection = _mssqlService.GetConnection())
+            {
+                await connection.OpenAsync();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        var command = connection.CreateCommand();
+                        command.Transaction = transaction;
+                        command.CommandText = @"
+                            UPDATE BasePosts
+                            SET Text = @Text, IsDeleted = @IsDeleted, LastCreatorPostID = @LastCreatorPostID, DateOfCreation = @DateOfCreation, Likes = @Likes, Dislikes = @Dislikes
+                            WHERE ID = @ID;";
+                        command.Parameters.AddWithValue("@ID", post.ID);
+                        command.Parameters.AddWithValue("@Text", post.Text);
+                        command.Parameters.AddWithValue("@IsDeleted", post.IsDeleted);
+                        command.Parameters.AddWithValue("@LastCreatorPostID", post.LastCreatorPostID);
+                        command.Parameters.AddWithValue("@DateOfCreation", post.DateOfCreation);
+                        command.Parameters.AddWithValue("@Likes", post.Likes);
+                        command.Parameters.AddWithValue("@Dislikes", post.Dislikes);
+
+                        await command.ExecuteNonQueryAsync();
+
+                        var deleteImagesCommand = connection.CreateCommand();
+                        deleteImagesCommand.Transaction = transaction;
+                        deleteImagesCommand.CommandText = @"
+                            DELETE FROM PostImages
+                            WHERE PostID = @PostID;";
+                        deleteImagesCommand.Parameters.AddWithValue("@PostID", post.ID);
+                        await deleteImagesCommand.ExecuteNonQueryAsync();
+
+                        foreach (var image in post.Images)
+                        {
+                            var imageCommand = connection.CreateCommand();
+                            imageCommand.Transaction = transaction;
+                            imageCommand.CommandText = @"
+                                INSERT INTO PostImages (PostID, Image)
+                                VALUES (@PostID, @Image);";
+                            imageCommand.Parameters.AddWithValue("@PostID", post.ID);
+                            imageCommand.Parameters.AddWithValue("@Image", image);
+                            await imageCommand.ExecuteNonQueryAsync();
+                        }
+
+                        transaction.Commit();
+                        return post;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
         }
     }
 
-    public async Task<BasePost> UpdatePost(BasePost post)
+    public interface IPostRepository<T>
     {
-        using (var connection = _mssqlService.GetConnection())
-        {
-            await connection.OpenAsync();
-            using (var transaction = connection.BeginTransaction())
-            {
-                try
-                {
-                    var command = connection.CreateCommand();
-                    command.Transaction = transaction;
-                    command.CommandText = @"
-                        UPDATE BasePosts
-                        SET Text = @Text, IsDeleted = @IsDeleted
-                        WHERE ID = @ID;";
-                    command.Parameters.AddWithValue("@ID", post.ID);
-                    command.Parameters.AddWithValue("@Text", post.Text);
-                    command.Parameters.AddWithValue("@IsDeleted", post.IsDeleted);
-
-                    await command.ExecuteNonQueryAsync();
-
-                    var deleteImagesCommand = connection.CreateCommand();
-                    deleteImagesCommand.Transaction = transaction;
-                    deleteImagesCommand.CommandText = @"
-                        DELETE FROM PostImages
-                        WHERE PostID = @PostID;";
-                    deleteImagesCommand.Parameters.AddWithValue("@PostID", post.ID);
-                    await deleteImagesCommand.ExecuteNonQueryAsync();
-
-                    foreach (var image in post.Images)
-                    {
-                        var imageCommand = connection.CreateCommand();
-                        imageCommand.Transaction = transaction;
-                        imageCommand.CommandText = @"
-                            INSERT INTO PostImages (PostID, Image)
-                            VALUES (@PostID, @Image);";
-                        imageCommand.Parameters.AddWithValue("@PostID", post.ID);
-                        imageCommand.Parameters.AddWithValue("@Image", image);
-                        await imageCommand.ExecuteNonQueryAsync();
-                    }
-
-                    transaction.Commit();
-                    return post;
-                }
-                catch
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-            }
-        }
     }
 }
