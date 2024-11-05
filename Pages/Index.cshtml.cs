@@ -1,11 +1,7 @@
-using System.Globalization;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using My_SocNet_Win.Classes;
-using My_SocNet_Win.Classes.DB;
 using My_SocNet_Win.Classes.User;
 
 namespace My_SocNet_Win.Pages;
@@ -22,7 +18,6 @@ public class IndexModel : PageModel
         _logger = logger;
         _siteSettings = siteSettings.Value;
     }
-    [Authorize]
     public void OnGet()
     {
         var roleClaims = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();

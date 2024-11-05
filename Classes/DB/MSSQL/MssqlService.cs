@@ -61,11 +61,18 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
                             ImgBinary NVARCHAR(MAX) NOT NULL
                         );
 
+                        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Roles' AND xtype='U')
+                        CREATE TABLE Roles (
+                            Id INT PRIMARY KEY IDENTITY,
+                            Role NVARCHAR(50) NOT NULL
+                        );
+
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserRoles' AND xtype='U')
                         CREATE TABLE UserRoles (
                             UserId INT NOT NULL,
-                            Role NVARCHAR(50) NOT NULL,
-                            FOREIGN KEY (UserId) REFERENCES Users(Id)
+                            RoleId INT NOT NULL,
+                            FOREIGN KEY (UserId) REFERENCES Users(Id),
+                            FOREIGN KEY (RoleId) REFERENCES Roles(Id)
                         );
 
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserFriends' AND xtype='U')
@@ -75,7 +82,7 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
                             FOREIGN KEY (UserId) REFERENCES Users(Id),
                             FOREIGN KEY (FriendId) REFERENCES Users(Id)
                         );
-                        
+
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='BasePosts' AND xtype='U')
                         CREATE TABLE BasePosts (
                             ID INT PRIMARY KEY,

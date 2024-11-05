@@ -91,6 +91,12 @@ namespace My_SocNet_Win.Pages
                     new Claim(ClaimTypes.Email, CurrentUser.Email)
                 };
 
+                // Add roles to claims
+                foreach (var role in CurrentUser.Roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var authProperties = new AuthenticationProperties
                 {

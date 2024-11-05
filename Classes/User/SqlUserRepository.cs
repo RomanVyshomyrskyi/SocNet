@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using My_SocNet_Win.Classes.DB.MSSQL;
 
 namespace My_SocNet_Win.Classes.User
@@ -38,13 +39,14 @@ namespace My_SocNet_Win.Classes.User
 
             foreach (var role in user.Roles)
             {
+                int roleId = await GetRoleIdAsync(role);
                 using (var command = _connection.CreateCommand())
                 {
                     command.CommandText = @"
-                    INSERT INTO UserRoles (UserId, Role)
-                    VALUES (@UserId, @Role)";
+                    INSERT INTO UserRoles (UserId, RoleId)
+                    VALUES (@UserId, @RoleId)";
                     command.Parameters.AddWithValue("@UserId", user.Id);
-                    command.Parameters.AddWithValue("@Role", role);
+                    command.Parameters.AddWithValue("@RoleId", roleId);
 
                     _connection.Open();
                     await command.ExecuteNonQueryAsync();
@@ -66,6 +68,27 @@ namespace My_SocNet_Win.Classes.User
                     await command.ExecuteNonQueryAsync();
                     _connection.Close();
                 }
+            }
+        }
+
+        private async Task<int> GetRoleIdAsync(string role)
+        {
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = @"
+                IF NOT EXISTS (SELECT * FROM Roles WHERE Role = @Role)
+                BEGIN
+                    INSERT INTO Roles (Role)
+                    VALUES (@Role);
+                END;
+                SELECT Id FROM Roles WHERE Role = @Role;";
+                command.Parameters.AddWithValue("@Role", role);
+
+                _connection.Open();
+                int roleId = (int)await command.ExecuteScalarAsync();
+                _connection.Close();
+
+                return roleId;
             }
         }
 
@@ -92,7 +115,8 @@ namespace My_SocNet_Win.Classes.User
                 command.CommandText = @"
                 SELECT u.*, r.Role, f.FriendId
                 FROM Users u
-                LEFT JOIN UserRoles r ON u.Id = r.UserId
+                LEFT JOIN UserRoles ur ON u.Id = ur.UserId
+                LEFT JOIN Roles r ON ur.RoleId = r.Id
                 LEFT JOIN UserFriends f ON u.Id = f.UserId
                 WHERE u.Email = @Email AND u.PasswordHash = @PasswordHash";
                 command.Parameters.AddWithValue("@Email", email);
@@ -221,6 +245,35 @@ namespace My_SocNet_Win.Classes.User
                 await command.ExecuteNonQueryAsync();
                 _connection.Close();
             }
+
+            // Update roles
+            using (var deleteCommand = _connection.CreateCommand())
+            {
+                deleteCommand.CommandText = @"
+                DELETE FROM UserRoles WHERE UserId = @UserId";
+                deleteCommand.Parameters.AddWithValue("@UserId", user.Id);
+
+                _connection.Open();
+                await deleteCommand.ExecuteNonQueryAsync();
+                _connection.Close();
+            }
+
+            foreach (var role in user.Roles)
+            {
+                int roleId = await GetRoleIdAsync(role);
+                using (var command = _connection.CreateCommand())
+                {
+                    command.CommandText = @"
+                    INSERT INTO UserRoles (UserId, RoleId)
+                    VALUES (@UserId, @RoleId)";
+                    command.Parameters.AddWithValue("@UserId", user.Id);
+                    command.Parameters.AddWithValue("@RoleId", roleId);
+
+                    _connection.Open();
+                    await command.ExecuteNonQueryAsync();
+                    _connection.Close();
+                }
+            }
         }
 
         public async Task EnsureAdminExistsAsync()
@@ -249,13 +302,17 @@ namespace My_SocNet_Win.Classes.User
             using (var command = _connection.CreateCommand())
             {
                 command.CommandText = @"
-                IF NOT EXISTS (SELECT * FROM UserRoles WHERE UserId = @UserId AND Role = @Role)
+                IF NOT EXISTS (SELECT * FROM Roles WHERE Role = 'admin')
                 BEGIN
-                    INSERT INTO UserRoles (UserId, Role)
-                    VALUES (@UserId, @Role)
+                    INSERT INTO Roles (Role)
+                    VALUES ('admin')
+                END;
+                IF NOT EXISTS (SELECT * FROM UserRoles WHERE UserId = @UserId AND RoleId = (SELECT Id FROM Roles WHERE Role = 'admin'))
+                BEGIN
+                    INSERT INTO UserRoles (UserId, RoleId)
+                    VALUES (@UserId, (SELECT Id FROM Roles WHERE Role = 'admin'))
                 END";
                 command.Parameters.AddWithValue("@UserId", 1);
-                command.Parameters.AddWithValue("@Role", "admin");
 
                 _connection.Open();
                 await command.ExecuteNonQueryAsync();
