@@ -96,7 +96,8 @@ namespace My_SocNet_Win.Pages
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
-
+                //Id
+                claims.Add(new Claim("UserId", CurrentUser.Id.ToString()));
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var authProperties = new AuthenticationProperties
                 {

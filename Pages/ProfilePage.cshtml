@@ -1,0 +1,14 @@
+﻿@page
+@model My_SocNet_Win.Pages.ProfilePageModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="grid-container" >
+    <div class="post-bg">
+        <h1>@Model.CurrentUser.Id</h1>
+        <h1>@Model.CurrentUser.UserName</h1>
+        <h1>@Model.CurrentUser.Email</h1>
+        <h1>@Model.CurrentUser.DateOfCreation</h1>
+    </div>
+</div>
