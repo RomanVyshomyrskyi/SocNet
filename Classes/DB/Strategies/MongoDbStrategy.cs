@@ -11,11 +11,15 @@ namespace My_SocNet_Win.Classes.DB.Strategies
         public void Configure(IServiceCollection services, IConfiguration configuration)
         {
             var mongoConnectionString = configuration.GetConnectionString("MongoDB");
+            if (string.IsNullOrEmpty(mongoConnectionString))
+            {
+                throw new ArgumentNullException(nameof(mongoConnectionString), "MongoDB connection string cannot be null or empty.");
+            }
             var mongoClient = new MongoClient(mongoConnectionString);
-            var mongoDatabase = mongoClient.GetDatabase("YourDatabaseName");
+            var mongoDatabase = mongoClient.GetDatabase("MySite"); 
             services.AddSingleton(mongoDatabase);
             services.AddScoped<IUserRepository<BaseUsers>, MongoUserRepository>();
-            services.AddScoped<IDatabaseService, MongoDbService>();
+            services.AddScoped<IDatabaseService>(provider => new MongoDbService(mongoConnectionString));
         }
 
         public void EnsureAdminUserExists(IServiceProvider services)
