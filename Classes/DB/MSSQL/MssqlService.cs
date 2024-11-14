@@ -103,6 +103,22 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
                             PostID INT NOT NULL,
                             Image VARBINARY(MAX),
                             FOREIGN KEY (PostID) REFERENCES BasePosts(ID)
+                        );
+
+                        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Comments' AND xtype='U')
+                        CREATE TABLE Comments (
+                            ID INT PRIMARY KEY,
+                            PostID INT NOT NULL,
+                            CreatorID INT NOT NULL,
+                            Text NVARCHAR(MAX),
+                            IsDeleted BIT NOT NULL DEFAULT 0,
+                            LastCreatorPostID INT,
+                            DateOfCreation DATETIME NOT NULL,
+                            Likes INT NOT NULL DEFAULT 0,
+                            Dislikes INT NOT NULL DEFAULT 0,
+                            FOREIGN KEY (PostID) REFERENCES BasePosts(ID),
+                            FOREIGN KEY (CreatorID) REFERENCES Users(Id),
+                            FOREIGN KEY (LastCreatorPostID) REFERENCES Comments(ID)
                         );";
                         command.ExecuteNonQuery();
                     }
