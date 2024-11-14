@@ -92,7 +92,7 @@ namespace My_SocNet_Win.Classes.User
             }
         }
 
-        public async Task DeleteUserAsync(string id)
+        public async Task DeleteUserAsync(int id)
         {
             using (var command = _connection.CreateCommand())
             {
@@ -192,7 +192,7 @@ namespace My_SocNet_Win.Classes.User
             return users;
         }
 
-        public async Task<BaseUsers> GetUserByIdAsync(string id)
+        public async Task<BaseUsers> GetUserByIdAsync(int id)
         {
             SqlUsers user = null;
 

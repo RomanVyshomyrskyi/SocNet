@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using My_SocNet_Win.Classes.Comment;
 using My_SocNet_Win.Classes.DB.MongoDB;
+using My_SocNet_Win.Classes.Posts;
 using My_SocNet_Win.Classes.User;
 
 namespace My_SocNet_Win.Classes.DB.Strategies
@@ -18,7 +20,9 @@ namespace My_SocNet_Win.Classes.DB.Strategies
             var mongoClient = new MongoClient(mongoConnectionString);
             var mongoDatabase = mongoClient.GetDatabase("MySite"); 
             services.AddSingleton(mongoDatabase);
-            services.AddScoped<IUserRepository<BaseUsers>, MongoUserRepository>();
+            services.AddScoped<IUserRepository<MongoUsers>, MongoUserRepository>();
+            services.AddScoped<IPostRepository<BasePost>, MongoPostRepository>();
+            services.AddScoped<ICommentRepository<BaseComment>, MongoCommentRepository>();
             services.AddScoped<IDatabaseService>(provider => new MongoDbService(mongoConnectionString));
         }
 

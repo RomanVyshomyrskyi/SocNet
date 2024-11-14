@@ -1,5 +1,6 @@
 using System;
 using MongoDB.Driver;
+using My_SocNet_Win.Classes.User;
 
 namespace My_SocNet_Win.Classes.DB.MongoDB;
 
@@ -40,7 +41,17 @@ public class MongoDbService : IDatabaseService
 
     public void EnsureDatabaseCreated()
     {
-        throw new NotImplementedException();
+        EnsureIndexes();
+    }
+
+    private void EnsureIndexes()
+    {
+        
+        var usersCollection = _database.GetCollection<BaseUsers>("Users");
+        var indexKeysDefinition = Builders<BaseUsers>.IndexKeys.Ascending(u => u.UserName);
+        var indexModel = new CreateIndexModel<BaseUsers>(indexKeysDefinition);
+        usersCollection.Indexes.CreateOne(indexModel);
+
     }
 
     #endregion

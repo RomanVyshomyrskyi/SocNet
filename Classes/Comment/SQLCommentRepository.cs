@@ -51,7 +51,7 @@ private readonly MssqlService _mssqlService;
         }
     }
 
-    public async Task<BaseComment> DeleteComment(Guid id)
+    public async Task<BaseComment> DeleteComment(int id)
     {
         using (var connection = _mssqlService.GetConnection())
         {
@@ -68,7 +68,7 @@ private readonly MssqlService _mssqlService;
         }
     }
 
-    public async Task<BaseComment> GetComment(Guid id)
+    public async Task<BaseComment> GetComment(int id)
     {
         using (var connection = _mssqlService.GetConnection())
         {

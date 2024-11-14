@@ -1,0 +1,68 @@
+using System;
+using MongoDB.Driver;
+
+namespace My_SocNet_Win.Classes.Posts;
+
+public class MongoPostRepository : IPostRepository<BasePost>
+{
+    private readonly IMongoCollection<BasePost> _postsCollection;
+
+        public MongoPostRepository(IMongoDatabase database)
+        {
+            _postsCollection = database.GetCollection<BasePost>("Posts");
+        }
+
+        public async Task<BasePost> CreatePost(BasePost post)
+        {
+            post.DateOfCreation = DateTime.UtcNow;
+
+            // Get the last post ID created by the user
+            var lastPost = await _postsCollection
+                .Find(p => p.CreatorID == post.CreatorID)
+                .SortByDescending(p => p.DateOfCreation)
+                .FirstOrDefaultAsync();
+
+            post.LastCreatorPostID = lastPost?.ID ?? 0;
+
+            await _postsCollection.InsertOneAsync(post);
+            return post;
+        }
+
+        public async Task<BasePost> DeletePost(int id)
+        {
+            var filter = Builders<BasePost>.Filter.Eq(nameof(BasePost.ID), id);
+            var update = Builders<BasePost>.Update.Set(p => p.IsDeleted, true);
+            var result = await _postsCollection.FindOneAndUpdateAsync(filter, update);
+            return result;
+        }
+
+        public async Task<BasePost> GetPost(int id)
+        {
+            return await _postsCollection.Find(p => p.ID == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<BasePost>> GetPosts(int count)
+        {
+            return await _postsCollection
+                .Find(p => !p.IsDeleted)
+                .SortByDescending(p => p.DateOfCreation)
+                .Limit(count)
+                .ToListAsync();
+        }
+
+        public async Task<BasePost> UpdatePost(BasePost post)
+        {
+            var filter = Builders<BasePost>.Filter.Eq(p => p.ID, post.ID);
+            var update = Builders<BasePost>.Update
+                .Set(p => p.Text, post.Text)
+                .Set(p => p.IsDeleted, post.IsDeleted)
+                .Set(p => p.LastCreatorPostID, post.LastCreatorPostID)
+                .Set(p => p.DateOfCreation, post.DateOfCreation)
+                .Set(p => p.Likes, post.Likes)
+                .Set(p => p.Dislikes, post.Dislikes)
+                .Set(p => p.Images, post.Images);
+
+            var result = await _postsCollection.FindOneAndUpdateAsync(filter, update);
+            return result;
+        }
+}

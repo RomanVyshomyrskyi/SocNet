@@ -28,7 +28,7 @@ namespace My_SocNet_Win.Pages
         public void OnGet()
         {
             var userId = User.FindFirstValue("UserId");
-            var dbUser = _userRepository.GetUserByIdAsync(userId).Result;
+            var dbUser = _userRepository.GetUserByIdAsync(Int32.Parse(userId)).Result;
             CurrentUser = UserConverter.ConvertToBaseUser(dbUser);
             ViewData["SiteName"] = _siteSettings.Name;
             ViewData["Version"] = _siteSettings.Version;   

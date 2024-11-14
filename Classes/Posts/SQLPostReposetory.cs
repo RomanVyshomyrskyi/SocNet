@@ -76,7 +76,7 @@ namespace My_SocNet_Win.Classes.Posts
             }
         }
 
-        public async Task<BasePost> DeletePost(Guid id)
+        public async Task<BasePost> DeletePost(int id)
         {
             using (var connection = _mssqlService.GetConnection())
             {
@@ -93,7 +93,7 @@ namespace My_SocNet_Win.Classes.Posts
             }
         }
 
-        public async Task<BasePost> GetPost(Guid id)
+        public async Task<BasePost> GetPost(int id)
         {
             using (var connection = _mssqlService.GetConnection())
             {

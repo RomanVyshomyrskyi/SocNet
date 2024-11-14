@@ -11,7 +11,7 @@ public class RedisUserRepository : IUserRepository<BaseUsers>
         throw new NotImplementedException();
     }
     
-    public Task DeleteUserAsync(string id)
+    public Task DeleteUserAsync(int id)
     {
         throw new NotImplementedException();
     }
@@ -31,7 +31,7 @@ public class RedisUserRepository : IUserRepository<BaseUsers>
         throw new NotImplementedException();
     }
     
-    public Task<BaseUsers> GetUserByIdAsync(string id)
+    public Task<BaseUsers> GetUserByIdAsync(int id)
     {
         throw new NotImplementedException();
     }
