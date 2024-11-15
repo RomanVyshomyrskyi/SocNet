@@ -3,7 +3,7 @@ using MongoDB.Libmongocrypt;
 
 namespace My_SocNet_Win.Classes.User;
 
-public abstract class BaseUsers : GetDBType
+public class BaseUsers : GetDBType
 {
     public int Id { get; set; }
     public required string UserName { get; set; }

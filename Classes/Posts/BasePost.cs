@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace My_SocNet_Win.Classes.Posts
 {
-    public abstract class BasePost
+    public class BasePost
     {
         public int ID { get; set; }
         public int CreatorID { get; set; }

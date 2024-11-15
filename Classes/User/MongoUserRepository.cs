@@ -2,31 +2,31 @@ using MongoDB.Driver;
 
 namespace My_SocNet_Win.Classes.User
 {
-    public class MongoUserRepository : IUserRepository<MongoUsers>
+    public class MongoUserRepository : IUserRepository<BaseUsers>
     {
-        private readonly IMongoCollection<MongoUsers> _collection;
+        private readonly IMongoCollection<BaseUsers> _collection;
 
         public MongoUserRepository(IMongoDatabase database)
         {
-            _collection = database.GetCollection<MongoUsers>("Users");
+            _collection = database.GetCollection<BaseUsers>("Users");
         }
 
-        public async Task<MongoUsers> GetUserByIdAsync(int id)
+        public async Task<BaseUsers> GetUserByIdAsync(int id)
         {
             return await _collection.Find(u => u.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<MongoUsers>> GetAllUsersAsync()
+        public async Task<IEnumerable<BaseUsers>> GetAllUsersAsync()
         {
             return await _collection.Find(_ => true).ToListAsync();
         }
 
-        public async Task AddUserAsync(MongoUsers user)
+        public async Task AddUserAsync(BaseUsers user)
         {
             await _collection.InsertOneAsync(user);
         }
 
-        public async Task UpdateUserAsync(MongoUsers user)
+        public async Task UpdateUserAsync(BaseUsers user)
         {
             await _collection.ReplaceOneAsync(u => u.Id == user.Id, user);
         }
@@ -56,7 +56,7 @@ namespace My_SocNet_Win.Classes.User
             }
         }
 
-        public async Task<MongoUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+        public async Task<BaseUsers> GetUserByEmailAndPasswordAsync(string email, string password)
         {
             return await _collection.Find(u => u.Email == email && u.Password == password).FirstOrDefaultAsync();
         }

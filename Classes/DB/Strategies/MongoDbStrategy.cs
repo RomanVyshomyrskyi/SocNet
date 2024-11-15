@@ -20,7 +20,7 @@ namespace My_SocNet_Win.Classes.DB.Strategies
             var mongoClient = new MongoClient(mongoConnectionString);
             var mongoDatabase = mongoClient.GetDatabase("MySite"); 
             services.AddSingleton(mongoDatabase);
-            services.AddScoped<IUserRepository<MongoUsers>, MongoUserRepository>();
+            services.AddScoped<IUserRepository<BaseUsers>, MongoUserRepository>();
             services.AddScoped<IPostRepository<BasePost>, MongoPostRepository>();
             services.AddScoped<ICommentRepository<BaseComment>, MongoCommentRepository>();
             services.AddScoped<IDatabaseService>(provider => new MongoDbService(mongoConnectionString));
