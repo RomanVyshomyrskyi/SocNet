@@ -10,6 +10,7 @@ using My_SocNet_Win.Classes.User;
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Drawing;
 
 namespace My_SocNet_Win.Pages
 {
@@ -67,6 +68,7 @@ namespace My_SocNet_Win.Pages
             if (cachedUser != null)
             {
                 CurrentUser = JsonSerializer.Deserialize<ConcreteUser>(cachedUser);
+                Console.WriteLine($"User {CurrentUser.UserName} found in cache.", Color.Green); 
             }
             else
             {
@@ -121,9 +123,52 @@ namespace My_SocNet_Win.Pages
             return Page();
         }
 
-        public IActionResult OnPostSignUp(string logname, string logemail, string logpass)
+        public async Task<IActionResult> OnPostSignUp(string logname, string logemail, string logpass)
         {
-            // Implement user registration logic here
+            var newUser = new BaseUsers
+            {
+                UserName = logname,
+                Email = logemail,
+                Password = logpass, 
+                DateOfCreation = DateTime.UtcNow,
+                LastLogin = DateTime.UtcNow,
+                Roles = new List<string> { "user" }
+            };
+
+            await _userRepository.AddUserAsync(newUser);
+
+            // Cache the new user
+            var cacheKey = $"user_{logemail}";
+            var serializedUser = JsonSerializer.Serialize(newUser);
+            await _cache.SetStringAsync(cacheKey, serializedUser, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(3) // Set user cache expiration time (3h in this case)
+            });
+
+            // Automatically log in the user after registration
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, newUser.UserName),
+                new Claim(ClaimTypes.Email, newUser.Email),
+                new Claim(ClaimTypes.Role, "user")
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+            // Cache claims data
+            var claimsCacheKey = $"claims_{logemail}";
+            var serializedClaims = JsonSerializer.Serialize(claims);
+            await _cache.SetStringAsync(claimsCacheKey, serializedClaims, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(3) // Set claims cache expiration time (3h in this case)
+            });
+
             return Redirect("/Index");
         }
     }

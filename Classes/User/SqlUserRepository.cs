@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using My_SocNet_Win.Classes.DB.MSSQL;
@@ -22,9 +23,9 @@ namespace My_SocNet_Win.Classes.User
             using (var command = _connection.CreateCommand())
             {
                 command.CommandText = @"
-                INSERT INTO Users (Id, UserName, Email, PasswordHash, DateOfCreation, LastLogin, ImgBinary)
-                VALUES (@Id, @UserName, @Email, @PasswordHash, @DateOfCreation, @LastLogin, @ImgBinary)";
-                command.Parameters.AddWithValue("@Id", user.Id);
+                INSERT INTO Users (UserName, Email, PasswordHash, DateOfCreation, LastLogin, ImgBinary)
+                VALUES (@UserName, @Email, @PasswordHash, @DateOfCreation, @LastLogin, @ImgBinary);
+                SELECT SCOPE_IDENTITY();"; // Get the newly generated Id
                 command.Parameters.AddWithValue("@UserName", user.UserName);
                 command.Parameters.AddWithValue("@Email", user.Email);
                 command.Parameters.AddWithValue("@PasswordHash", user.Password);
@@ -33,7 +34,7 @@ namespace My_SocNet_Win.Classes.User
                 command.Parameters.AddWithValue("@ImgBinary", user.ImgBinary);
 
                 _connection.Open();
-                await command.ExecuteNonQueryAsync();
+                user.Id = Convert.ToInt32(await command.ExecuteScalarAsync()); // Set the generated Id to the user object
                 _connection.Close();
             }
 
@@ -283,10 +284,10 @@ namespace My_SocNet_Win.Classes.User
                 command.CommandText = @"
                 IF NOT EXISTS (SELECT * FROM Users WHERE UserName = 'admin')
                 BEGIN
-                    INSERT INTO Users (Id, UserName, Email, PasswordHash, DateOfCreation, LastLogin, ImgBinary)
-                    VALUES (@Id, @UserName, @Email, @PasswordHash, @DateOfCreation, @LastLogin, @ImgBinary)
+                    INSERT INTO Users (UserName, Email, PasswordHash, DateOfCreation, LastLogin, ImgBinary)
+                    VALUES (@UserName, @Email, @PasswordHash, @DateOfCreation, @LastLogin, @ImgBinary);
+                    SELECT SCOPE_IDENTITY();
                 END";
-                command.Parameters.AddWithValue("@Id", 1);
                 command.Parameters.AddWithValue("@UserName", "admin");
                 command.Parameters.AddWithValue("@Email", "admin@admin.com");
                 command.Parameters.AddWithValue("@PasswordHash", "admin"); // Replace with actual hashed password
@@ -295,28 +296,39 @@ namespace My_SocNet_Win.Classes.User
                 command.Parameters.AddWithValue("@ImgBinary", string.Empty);
 
                 _connection.Open();
-                await command.ExecuteNonQueryAsync();
+                var adminId = Convert.ToInt32(await command.ExecuteScalarAsync()); // Get the generated Id for the admin user
                 _connection.Close();
-            }
 
-            using (var command = _connection.CreateCommand())
-            {
-                command.CommandText = @"
-                IF NOT EXISTS (SELECT * FROM Roles WHERE Role = 'admin')
-                BEGIN
-                    INSERT INTO Roles (Role)
-                    VALUES ('admin')
-                END;
-                IF NOT EXISTS (SELECT * FROM UserRoles WHERE UserId = @UserId AND RoleId = (SELECT Id FROM Roles WHERE Role = 'admin'))
-                BEGIN
-                    INSERT INTO UserRoles (UserId, RoleId)
-                    VALUES (@UserId, (SELECT Id FROM Roles WHERE Role = 'admin'))
-                END";
-                command.Parameters.AddWithValue("@UserId", 1);
+                if (adminId > 0)
+                {
+                    using (var roleCommand = _connection.CreateCommand())
+                    {
+                        roleCommand.CommandText = @"
+                        IF NOT EXISTS (SELECT * FROM Roles WHERE Role = 'admin')
+                        BEGIN
+                            INSERT INTO Roles (Role)
+                            VALUES ('admin');
+                        END";
+                        _connection.Open();
+                        await roleCommand.ExecuteNonQueryAsync();
+                        _connection.Close();
+                    }
 
-                _connection.Open();
-                await command.ExecuteNonQueryAsync();
-                _connection.Close();
+                    using (var userRoleCommand = _connection.CreateCommand())
+                    {
+                        userRoleCommand.CommandText = @"
+                        IF NOT EXISTS (SELECT * FROM UserRoles WHERE UserId = @UserId AND RoleId = (SELECT Id FROM Roles WHERE Role = 'admin'))
+                        BEGIN
+                            INSERT INTO UserRoles (UserId, RoleId)
+                            VALUES (@UserId, (SELECT Id FROM Roles WHERE Role = 'admin'))
+                        END";
+                        userRoleCommand.Parameters.AddWithValue("@UserId", adminId);
+
+                        _connection.Open();
+                        await userRoleCommand.ExecuteNonQueryAsync();
+                        _connection.Close();
+                    }
+                }
             }
         }
     }

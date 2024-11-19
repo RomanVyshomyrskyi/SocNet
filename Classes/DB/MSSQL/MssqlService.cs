@@ -52,7 +52,7 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
                         command.CommandText = @"
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Users' AND xtype='U')
                         CREATE TABLE Users (
-                            Id INT PRIMARY KEY,
+                            Id INT PRIMARY KEY IDENTITY(1,1),
                             UserName NVARCHAR(50) NOT NULL,
                             PasswordHash NVARCHAR(255) NOT NULL,
                             Email NVARCHAR(50) NOT NULL,
@@ -63,7 +63,7 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
 
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Roles' AND xtype='U')
                         CREATE TABLE Roles (
-                            Id INT PRIMARY KEY IDENTITY,
+                            Id INT PRIMARY KEY IDENTITY(1,1),
                             Role NVARCHAR(50) NOT NULL
                         );
 
@@ -85,7 +85,7 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
 
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='BasePosts' AND xtype='U')
                         CREATE TABLE BasePosts (
-                            ID INT PRIMARY KEY,
+                            ID INT PRIMARY KEY IDENTITY(1,1),
                             CreatorID INT NOT NULL,
                             Text NVARCHAR(MAX),
                             IsDeleted BIT NOT NULL DEFAULT 0,
@@ -99,7 +99,7 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
 
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PostImages' AND xtype='U')
                         CREATE TABLE PostImages (
-                            ID INT PRIMARY KEY IDENTITY,
+                            ID INT PRIMARY KEY IDENTITY(1,1),
                             PostID INT NOT NULL,
                             Image VARBINARY(MAX),
                             FOREIGN KEY (PostID) REFERENCES BasePosts(ID)
@@ -107,7 +107,7 @@ namespace My_SocNet_Win.Classes.DB.MSSQL
 
                         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Comments' AND xtype='U')
                         CREATE TABLE Comments (
-                            ID INT PRIMARY KEY,
+                            ID INT PRIMARY KEY IDENTITY(1,1),
                             PostID INT NOT NULL,
                             CreatorID INT NOT NULL,
                             Text NVARCHAR(MAX),

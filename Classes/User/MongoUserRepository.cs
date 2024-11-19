@@ -1,14 +1,18 @@
 using MongoDB.Driver;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace My_SocNet_Win.Classes.User
 {
     public class MongoUserRepository : IUserRepository<BaseUsers>
     {
         private readonly IMongoCollection<BaseUsers> _collection;
+        private readonly IMongoCollection<Counter> _counterCollection;
 
         public MongoUserRepository(IMongoDatabase database)
         {
             _collection = database.GetCollection<BaseUsers>("Users");
+            _counterCollection = database.GetCollection<Counter>("Counters");
         }
 
         public async Task<BaseUsers> GetUserByIdAsync(int id)
@@ -23,6 +27,7 @@ namespace My_SocNet_Win.Classes.User
 
         public async Task AddUserAsync(BaseUsers user)
         {
+            user.Id = await GetNextSequenceValueAsync("UserId");
             await _collection.InsertOneAsync(user);
         }
 
@@ -43,7 +48,7 @@ namespace My_SocNet_Win.Classes.User
             {
                 var admin = new MongoUsers
                 {
-                    Id = 1,
+                    Id = await GetNextSequenceValueAsync("UserId"),
                     UserName = "admin",
                     Email = "admin@admin.com",
                     Password = "admin", // Replace with actual hashed password
@@ -60,5 +65,25 @@ namespace My_SocNet_Win.Classes.User
         {
             return await _collection.Find(u => u.Email == email && u.Password == password).FirstOrDefaultAsync();
         }
+
+        private async Task<int> GetNextSequenceValueAsync(string sequenceName)
+        {
+            var filter = Builders<Counter>.Filter.Eq(c => c.Id, sequenceName);
+            var update = Builders<Counter>.Update.Inc(c => c.SequenceValue, 1);
+            var options = new FindOneAndUpdateOptions<Counter>
+            {
+                ReturnDocument = ReturnDocument.After,
+                IsUpsert = true
+            };
+
+            var counter = await _counterCollection.FindOneAndUpdateAsync(filter, update, options);
+            return counter.SequenceValue;
+        }
+    }
+
+    public class Counter
+    {
+        public string Id { get; set; }
+        public int SequenceValue { get; set; }
     }
 }
