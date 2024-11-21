@@ -11,8 +11,13 @@ namespace My_SocNet_Win.Pages
     {
         public async Task OnGet()
         {
+        }
+
+
+        public async Task<IActionResult> OnPostLogOut()
+        {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Redirect("/Index");
+            return RedirectToPage("/Index");
         }
     }
 }
