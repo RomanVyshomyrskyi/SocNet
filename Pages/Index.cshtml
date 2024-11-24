@@ -10,6 +10,22 @@
         <div style="text-align: right;">
             <a class="btnhower" href="">Create topic &#xFF0B;</a>
         </div>
+        <div style="align-items: center; margin: 20px;"> 
+            @foreach(var post in Model.RecentPosts){
+                <div class="card">
+                    <div class="card-header">
+                        <a href="">@post.ID</a>
+                    </div>
+                    <div class="card-body">
+                        <p>@post.Text</p>
+                    </div>
+                    <div class="card-footer">
+                        <p>Created by: @post.CreatorID</p>
+                        <p>Created at: @post.DateOfCreation</p>
+                    </div>
+                </div>
+            }
+        </div>
         
     }else{
         <div class="text-center">

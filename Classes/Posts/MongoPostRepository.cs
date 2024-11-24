@@ -1,20 +1,25 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using MongoDB.Driver;
 
-namespace My_SocNet_Win.Classes.Posts;
-
-public class MongoPostRepository : IPostRepository<BasePost>
+namespace My_SocNet_Win.Classes.Posts
 {
-    private readonly IMongoCollection<BasePost> _postsCollection;
+    public class MongoPostRepository : IPostReposetory<BasePost>
+    {
+        private readonly IMongoCollection<BasePost> _postsCollection;
+        private readonly IMongoCollection<Counter> _counterCollection;
 
         public MongoPostRepository(IMongoDatabase database)
         {
             _postsCollection = database.GetCollection<BasePost>("Posts");
+            _counterCollection = database.GetCollection<Counter>("Counters");
         }
 
         public async Task<BasePost> CreatePost(BasePost post)
         {
             post.DateOfCreation = DateTime.UtcNow;
+            post.ID = await GetNextSequenceValueAsync("PostId");
 
             // Get the last post ID created by the user
             var lastPost = await _postsCollection
@@ -65,4 +70,25 @@ public class MongoPostRepository : IPostRepository<BasePost>
             var result = await _postsCollection.FindOneAndUpdateAsync(filter, update);
             return result;
         }
+
+        private async Task<int> GetNextSequenceValueAsync(string sequenceName)
+        {
+            var filter = Builders<Counter>.Filter.Eq(c => c.Id, sequenceName);
+            var update = Builders<Counter>.Update.Inc(c => c.SequenceValue, 1);
+            var options = new FindOneAndUpdateOptions<Counter>
+            {
+                ReturnDocument = ReturnDocument.After,
+                IsUpsert = true
+            };
+
+            var counter = await _counterCollection.FindOneAndUpdateAsync(filter, update, options);
+            return counter.SequenceValue;
+        }
+    }
+
+    public class Counter
+    {
+        public string Id { get; set; }
+        public int SequenceValue { get; set; }
+    }
 }

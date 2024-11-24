@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using My_SocNet_Win.Classes;
+using My_SocNet_Win.Classes.Posts;
 using My_SocNet_Win.Classes.User;
 
 namespace My_SocNet_Win.Pages;
@@ -10,16 +11,20 @@ public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
     private readonly SiteSettings _siteSettings;
+    private readonly IPostReposetory<Post> _postRepository;
     public ConcreteUser? CurrentUser { get; set; }
+    public List<Post> RecentPosts { get; set; } = new List<Post>();
 
-    public IndexModel(ILogger<IndexModel> logger, IOptions<SiteSettings> siteSettings)
+    public IndexModel(ILogger<IndexModel> logger, IOptions<SiteSettings> siteSettings, IPostReposetory<Post> postRepository)
     {
 
         _logger = logger;
         _siteSettings = siteSettings.Value;
+        _postRepository = postRepository;
     }
-    public void OnGet()
+    public async Task OnGet()
     {
+        #region Obligatory for all pages
         var roleClaims = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
         CurrentUser = new ConcreteUser
         {
@@ -33,5 +38,8 @@ public class IndexModel : PageModel
         ViewData["Name"] = _siteSettings.Name;
         ViewData["Footer"] = _siteSettings.Footer;
         ViewData["Version"] = _siteSettings.Version;
+        #endregion
+
+        RecentPosts = await _postRepository.GetPosts(15);
     }
 }
