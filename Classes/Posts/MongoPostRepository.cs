@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace My_SocNet_Win.Classes.Posts
 {
-    public class MongoPostRepository : IPostReposetory<BasePost>
+    public class MongoPostRepository : IPostRepository<BasePost>
     {
         private readonly IMongoCollection<BasePost> _postsCollection;
         private readonly IMongoCollection<Counter> _counterCollection;

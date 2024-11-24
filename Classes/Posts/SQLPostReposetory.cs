@@ -259,7 +259,4 @@ namespace My_SocNet_Win.Classes.Posts
         }
     }
 
-    public interface IPostRepository<T>
-    {
-    }
 }
