@@ -1,17 +1,18 @@
 ﻿@page
-@model IndexModel
+@model My_SocNet_Win.Pages.IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
-
-    
-@if(User.Identity.IsAuthenticated){
+@if(User.Identity.IsAuthenticated)
+{
     <div style="text-align: right;">
         <a class="btnhower" href="/CreatePost">Create topic &#xFF0B;</a>
     </div>
     <div style="align-items: center; margin: 20px;"> 
-        @foreach(var post in Model.RecentPosts){
+        @foreach(var post in Model.RecentPosts)
+        {
+            if (post == null) continue;
             <div class="card">
                 <div class="card-header">
                     <a href="">@post.ID</a>
@@ -20,14 +21,15 @@
                     <p>@post.Text</p>
                 </div>
                 <div class="card-footer">
-                    <p>Created by:  @post.CreatorID</p>
-                    <p>Created at:  @post.DateOfCreation</p>
+                    <p>Created by: @Model.UserNames[post.CreatorID]</p>
+                    <p>Created at: @post.DateOfCreation</p>
                 </div>
             </div>
         }
     </div>
-    
-}else{
+}
+else
+{
     <div class="text-center">
         <h1 class="display-4">Welcome</h1>
         <h2>This page is main page of @ViewData["Name"]</h2>

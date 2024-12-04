@@ -35,6 +35,11 @@ public class HanaUserRepository : IUserRepository<BaseUsers>
         throw new NotImplementedException();
     }
 
+    public Task<string> GetUserNameByIdAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task UpdateUserAsync(BaseUsers user)
     {
         throw new NotImplementedException();

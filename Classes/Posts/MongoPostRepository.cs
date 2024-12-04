@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace My_SocNet_Win.Classes.Posts
 {
@@ -9,6 +12,19 @@ namespace My_SocNet_Win.Classes.Posts
     {
         private readonly IMongoCollection<BasePost> _postsCollection;
         private readonly IMongoCollection<Counter> _counterCollection;
+
+        static MongoPostRepository()
+        {
+            // Register the class map for BasePost
+            if (!BsonClassMap.IsClassMapRegistered(typeof(BasePost)))
+            {
+                BsonClassMap.RegisterClassMap<BasePost>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.MapIdMember(c => c.ID).SetSerializer(new Int32Serializer(BsonType.Int32));
+                });
+            }
+        }
 
         public MongoPostRepository(IMongoDatabase database)
         {

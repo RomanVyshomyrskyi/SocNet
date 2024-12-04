@@ -1,5 +1,27 @@
 ﻿@page
 @model My_SocNet_Win.Pages.CreatePostModel
 @{
-    ViewData["Title"] = "CreatePost";
+    ViewData["Title"] = "Create Post";
+}
+
+<h2>Create Post</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Post.Text">Text</label>
+        <textarea asp-for="Post.Text" class="form-control"></textarea>
+        <span asp-validation-for="Post.Text" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Images">Images (optional)</label>
+        <input type="file" name="Images" class="form-control" multiple />
+        <span asp-validation-for="Images" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

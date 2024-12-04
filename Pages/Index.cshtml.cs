@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using My_SocNet_Win.Classes;
 using My_SocNet_Win.Classes.Posts;
 using My_SocNet_Win.Classes.User;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace My_SocNet_Win.Pages
 {
@@ -12,14 +14,17 @@ namespace My_SocNet_Win.Pages
         private readonly ILogger<IndexModel> _logger;
         private readonly SiteSettings _siteSettings;
         private readonly IPostRepository<BasePost> _postRepository;
+        private readonly IUserRepository<BaseUsers> _userRepository;
         public ConcreteUser? CurrentUser { get; set; }
         public List<BasePost> RecentPosts { get; set; } = new List<BasePost>();
+        public Dictionary<int, string> UserNames { get; set; } = new Dictionary<int, string>();
 
-        public IndexModel(ILogger<IndexModel> logger, IOptions<SiteSettings> siteSettings, IPostRepository<BasePost> postRepository)
+        public IndexModel(ILogger<IndexModel> logger, IOptions<SiteSettings> siteSettings, IPostRepository<BasePost> postRepository, IUserRepository<BaseUsers> userRepository)
         {
             _logger = logger;
             _siteSettings = siteSettings.Value;
             _postRepository = postRepository;
+            _userRepository = userRepository;
         }
 
         public async Task OnGet()
@@ -38,9 +43,22 @@ namespace My_SocNet_Win.Pages
             ViewData["Footer"] = _siteSettings.Footer;
             ViewData["Version"] = _siteSettings.Version;
             #endregion
-            try{
+
+            try
+            {
                 RecentPosts = await _postRepository.GetPosts(15);
-            }catch(Exception ex){
+
+                foreach (var post in RecentPosts)
+                {
+                    if (post != null && !UserNames.ContainsKey(post.CreatorID))
+                    {
+                        var userName = await _userRepository.GetUserNameByIdAsync(post.CreatorID);
+                        UserNames[post.CreatorID] = userName ?? "Unknown";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
                 _logger.LogError(ex, "Error getting recent posts");
             }
         }

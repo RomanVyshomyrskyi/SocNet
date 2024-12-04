@@ -20,6 +20,12 @@ namespace My_SocNet_Win.Classes.User
             return await _collection.Find(u => u.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<string> GetUserNameByIdAsync(int id)
+        {
+            var user = await _collection.Find(u => u.Id == id).FirstOrDefaultAsync();
+            return user?.UserName;
+        }
+
         public async Task<IEnumerable<BaseUsers>> GetAllUsersAsync()
         {
             return await _collection.Find(_ => true).ToListAsync();

@@ -15,7 +15,82 @@ namespace My_SocNet_Win.Classes.User
         {
             _mssqlService = mssqlService;
             _connection = _mssqlService.GetConnection();
-            _mssqlService.EnsureDatabaseCreated();
+        }
+
+        public async Task<BaseUsers> GetUserByIdAsync(int id)
+        {
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM Users WHERE Id = @Id";
+                command.Parameters.AddWithValue("@Id", id);
+
+                _connection.Open();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        var user = new BaseUsers
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            Password = reader.GetString(reader.GetOrdinal("PasswordHash")),
+                            DateOfCreation = reader.GetDateTime(reader.GetOrdinal("DateOfCreation")),
+                            LastLogin = reader.GetDateTime(reader.GetOrdinal("LastLogin")),
+                            ImgBinary = reader.GetString(reader.GetOrdinal("ImgBinary"))
+                        };
+                        _connection.Close();
+                        return user;
+                    }
+                }
+                _connection.Close();
+            }
+            return null;
+        }
+
+        public async Task<string> GetUserNameByIdAsync(int id)
+        {
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = "SELECT UserName FROM Users WHERE Id = @Id";
+                command.Parameters.AddWithValue("@Id", id);
+
+                _connection.Open();
+                var userName = await command.ExecuteScalarAsync() as string;
+                _connection.Close();
+
+                return userName;
+            }
+        }
+
+        public async Task<IEnumerable<BaseUsers>> GetAllUsersAsync()
+        {
+            var users = new List<BaseUsers>();
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM Users";
+
+                _connection.Open();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        var user = new BaseUsers
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            Password = reader.GetString(reader.GetOrdinal("PasswordHash")),
+                            DateOfCreation = reader.GetDateTime(reader.GetOrdinal("DateOfCreation")),
+                            LastLogin = reader.GetDateTime(reader.GetOrdinal("LastLogin")),
+                            ImgBinary = reader.GetString(reader.GetOrdinal("ImgBinary"))
+                        };
+                        users.Add(user);
+                    }
+                }
+                _connection.Close();
+            }
+            return users;
         }
 
         public async Task AddUserAsync(BaseUsers user)
@@ -23,207 +98,20 @@ namespace My_SocNet_Win.Classes.User
             using (var command = _connection.CreateCommand())
             {
                 command.CommandText = @"
-                INSERT INTO Users (UserName, Email, PasswordHash, DateOfCreation, LastLogin, ImgBinary)
-                VALUES (@UserName, @Email, @PasswordHash, @DateOfCreation, @LastLogin, @ImgBinary);
-                SELECT SCOPE_IDENTITY();"; // Get the newly generated Id
+                    INSERT INTO Users (UserName, Email, PasswordHash, DateOfCreation, LastLogin, ImgBinary)
+                    VALUES (@UserName, @Email, @PasswordHash, @DateOfCreation, @LastLogin, @ImgBinary);
+                    SELECT SCOPE_IDENTITY();";
                 command.Parameters.AddWithValue("@UserName", user.UserName);
                 command.Parameters.AddWithValue("@Email", user.Email);
-                command.Parameters.AddWithValue("@PasswordHash", user.Password);
+                command.Parameters.AddWithValue("@PasswordHash", user.Password); // Ensure this is hashed
                 command.Parameters.AddWithValue("@DateOfCreation", user.DateOfCreation);
                 command.Parameters.AddWithValue("@LastLogin", user.LastLogin);
                 command.Parameters.AddWithValue("@ImgBinary", user.ImgBinary);
 
                 _connection.Open();
-                user.Id = Convert.ToInt32(await command.ExecuteScalarAsync()); // Set the generated Id to the user object
+                user.Id = Convert.ToInt32(await command.ExecuteScalarAsync());
                 _connection.Close();
             }
-
-            foreach (var role in user.Roles)
-            {
-                int roleId = await GetRoleIdAsync(role);
-                using (var command = _connection.CreateCommand())
-                {
-                    command.CommandText = @"
-                    INSERT INTO UserRoles (UserId, RoleId)
-                    VALUES (@UserId, @RoleId)";
-                    command.Parameters.AddWithValue("@UserId", user.Id);
-                    command.Parameters.AddWithValue("@RoleId", roleId);
-
-                    _connection.Open();
-                    await command.ExecuteNonQueryAsync();
-                    _connection.Close();
-                }
-            }
-
-            foreach (var friendId in user.Friends)
-            {
-                using (var command = _connection.CreateCommand())
-                {
-                    command.CommandText = @"
-                    INSERT INTO UserFriends (UserId, FriendId)
-                    VALUES (@UserId, @FriendId)";
-                    command.Parameters.AddWithValue("@UserId", user.Id);
-                    command.Parameters.AddWithValue("@FriendId", friendId);
-
-                    _connection.Open();
-                    await command.ExecuteNonQueryAsync();
-                    _connection.Close();
-                }
-            }
-        }
-
-        private async Task<int> GetRoleIdAsync(string role)
-        {
-            using (var command = _connection.CreateCommand())
-            {
-                command.CommandText = @"
-                IF NOT EXISTS (SELECT * FROM Roles WHERE Role = @Role)
-                BEGIN
-                    INSERT INTO Roles (Role)
-                    VALUES (@Role);
-                END;
-                SELECT Id FROM Roles WHERE Role = @Role;";
-                command.Parameters.AddWithValue("@Role", role);
-
-                _connection.Open();
-                int roleId = (int)await command.ExecuteScalarAsync();
-                _connection.Close();
-
-                return roleId;
-            }
-        }
-
-        public async Task DeleteUserAsync(int id)
-        {
-            using (var command = _connection.CreateCommand())
-            {
-                command.CommandText = @"
-                DELETE FROM Users WHERE Id = @Id";
-                command.Parameters.AddWithValue("@Id", id);
-
-                _connection.Open();
-                await command.ExecuteNonQueryAsync();
-                _connection.Close();
-            }
-        }
-
-        public async Task<BaseUsers> GetUserByEmailAndPasswordAsync(string email, string password)
-        {
-            SqlUsers user = null;
-
-            using (var command = _connection.CreateCommand())
-            {
-                command.CommandText = @"
-                SELECT u.*, r.Role, f.FriendId
-                FROM Users u
-                LEFT JOIN UserRoles ur ON u.Id = ur.UserId
-                LEFT JOIN Roles r ON ur.RoleId = r.Id
-                LEFT JOIN UserFriends f ON u.Id = f.UserId
-                WHERE u.Email = @Email AND u.PasswordHash = @PasswordHash";
-                command.Parameters.AddWithValue("@Email", email);
-                command.Parameters.AddWithValue("@PasswordHash", password);
-
-                _connection.Open();
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    if (await reader.ReadAsync())
-                    {
-                        user = new SqlUsers
-                        {
-                            Id = (int)reader["Id"],
-                            UserName = reader["UserName"].ToString(),
-                            Email = reader["Email"].ToString(),
-                            Password = reader["PasswordHash"].ToString(),
-                            DateOfCreation = (DateTime)reader["DateOfCreation"],
-                            LastLogin = (DateTime)reader["LastLogin"],
-                            ImgBinary = reader["ImgBinary"].ToString(),
-                            Roles = new List<string>(),
-                            Friends = new List<int>()
-                        };
-
-                        do
-                        {
-                            if (!reader.IsDBNull(reader.GetOrdinal("Role")))
-                            {
-                                user.Roles.Add(reader["Role"].ToString());
-                            }
-
-                            if (!reader.IsDBNull(reader.GetOrdinal("FriendId")))
-                            {
-                                user.Friends.Add((int)reader["FriendId"]);
-                            }
-                        } while (await reader.ReadAsync());
-                    }
-                }
-                _connection.Close();
-            }
-
-            return user;
-        }
-
-        public async Task<IEnumerable<BaseUsers>> GetAllUsersAsync()
-        {
-            var users = new List<SqlUsers>();
-
-            using (var connection = _mssqlService.GetConnection())
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "SELECT * FROM Users";
-
-                connection.Open();
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    while (await reader.ReadAsync())
-                    {
-                        users.Add(new SqlUsers
-                        {
-                            Id = (int)reader["Id"],
-                            UserName = reader["UserName"].ToString(),
-                            Email = reader["Email"].ToString(),
-                            Password = reader["PasswordHash"].ToString(),
-                            DateOfCreation = (DateTime)reader["DateOfCreation"],
-                            LastLogin = (DateTime)reader["LastLogin"],
-                            ImgBinary = reader["ImgBinary"].ToString()
-                        });
-                    }
-                }
-                connection.Close();
-            }
-
-            return users;
-        }
-
-        public async Task<BaseUsers> GetUserByIdAsync(int id)
-        {
-            SqlUsers user = null;
-
-            using (var command = _connection.CreateCommand())
-            {
-                command.CommandText = @"
-                SELECT * FROM Users WHERE Id = @Id";
-                command.Parameters.AddWithValue("@Id", id);
-
-                _connection.Open();
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    if (await reader.ReadAsync())
-                    {
-                        user = new SqlUsers
-                        {
-                            Id = (int)reader["Id"],
-                            UserName = reader["UserName"].ToString(),
-                            Email = reader["Email"].ToString(),
-                            Password = reader["PasswordHash"].ToString(),
-                            DateOfCreation = (DateTime)reader["DateOfCreation"],
-                            LastLogin = (DateTime)reader["LastLogin"],
-                            ImgBinary = reader["ImgBinary"].ToString()
-                        };
-                    }
-                }
-                _connection.Close();
-            }
-
-            return user;
         }
 
         public async Task UpdateUserAsync(BaseUsers user)
@@ -231,49 +119,38 @@ namespace My_SocNet_Win.Classes.User
             using (var command = _connection.CreateCommand())
             {
                 command.CommandText = @"
-                UPDATE Users
-                SET UserName = @UserName, Email = @Email, PasswordHash = @PasswordHash, DateOfCreation = @DateOfCreation, LastLogin = @LastLogin, ImgBinary = @ImgBinary
-                WHERE Id = @Id";
-                command.Parameters.AddWithValue("@Id", user.Id);
+                    UPDATE Users
+                    SET UserName = @UserName,
+                        Email = @Email,
+                        PasswordHash = @PasswordHash,
+                        DateOfCreation = @DateOfCreation,
+                        LastLogin = @LastLogin,
+                        ImgBinary = @ImgBinary
+                    WHERE Id = @Id";
                 command.Parameters.AddWithValue("@UserName", user.UserName);
                 command.Parameters.AddWithValue("@Email", user.Email);
-                command.Parameters.AddWithValue("@PasswordHash", user.Password);
+                command.Parameters.AddWithValue("@PasswordHash", user.Password); // Ensure this is hashed
                 command.Parameters.AddWithValue("@DateOfCreation", user.DateOfCreation);
                 command.Parameters.AddWithValue("@LastLogin", user.LastLogin);
                 command.Parameters.AddWithValue("@ImgBinary", user.ImgBinary);
+                command.Parameters.AddWithValue("@Id", user.Id);
 
                 _connection.Open();
                 await command.ExecuteNonQueryAsync();
                 _connection.Close();
             }
+        }
 
-            // Update roles
-            using (var deleteCommand = _connection.CreateCommand())
+        public async Task DeleteUserAsync(int id)
+        {
+            using (var command = _connection.CreateCommand())
             {
-                deleteCommand.CommandText = @"
-                DELETE FROM UserRoles WHERE UserId = @UserId";
-                deleteCommand.Parameters.AddWithValue("@UserId", user.Id);
+                command.CommandText = "DELETE FROM Users WHERE Id = @Id";
+                command.Parameters.AddWithValue("@Id", id);
 
                 _connection.Open();
-                await deleteCommand.ExecuteNonQueryAsync();
+                await command.ExecuteNonQueryAsync();
                 _connection.Close();
-            }
-
-            foreach (var role in user.Roles)
-            {
-                int roleId = await GetRoleIdAsync(role);
-                using (var command = _connection.CreateCommand())
-                {
-                    command.CommandText = @"
-                    INSERT INTO UserRoles (UserId, RoleId)
-                    VALUES (@UserId, @RoleId)";
-                    command.Parameters.AddWithValue("@UserId", user.Id);
-                    command.Parameters.AddWithValue("@RoleId", roleId);
-
-                    _connection.Open();
-                    await command.ExecuteNonQueryAsync();
-                    _connection.Close();
-                }
             }
         }
 
@@ -313,23 +190,40 @@ namespace My_SocNet_Win.Classes.User
                         await roleCommand.ExecuteNonQueryAsync();
                         _connection.Close();
                     }
-
-                    using (var userRoleCommand = _connection.CreateCommand())
-                    {
-                        userRoleCommand.CommandText = @"
-                        IF NOT EXISTS (SELECT * FROM UserRoles WHERE UserId = @UserId AND RoleId = (SELECT Id FROM Roles WHERE Role = 'admin'))
-                        BEGIN
-                            INSERT INTO UserRoles (UserId, RoleId)
-                            VALUES (@UserId, (SELECT Id FROM Roles WHERE Role = 'admin'))
-                        END";
-                        userRoleCommand.Parameters.AddWithValue("@UserId", adminId);
-
-                        _connection.Open();
-                        await userRoleCommand.ExecuteNonQueryAsync();
-                        _connection.Close();
-                    }
                 }
             }
+        }
+
+        public async Task<BaseUsers> GetUserByEmailAndPasswordAsync(string email, string password)
+        {
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM Users WHERE Email = @Email AND PasswordHash = @PasswordHash";
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@PasswordHash", password); // Ensure this is hashed
+
+                _connection.Open();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        var user = new BaseUsers
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            Password = reader.GetString(reader.GetOrdinal("PasswordHash")),
+                            DateOfCreation = reader.GetDateTime(reader.GetOrdinal("DateOfCreation")),
+                            LastLogin = reader.GetDateTime(reader.GetOrdinal("LastLogin")),
+                            ImgBinary = reader.GetString(reader.GetOrdinal("ImgBinary"))
+                        };
+                        _connection.Close();
+                        return user;
+                    }
+                }
+                _connection.Close();
+            }
+            return null;
         }
     }
 }
