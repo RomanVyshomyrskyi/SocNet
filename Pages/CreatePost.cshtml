@@ -8,6 +8,11 @@
 
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
+        <label asp-for="Post.Title">Title</label>
+        <input asp-for="Post.Title" class="form-control" />
+        <span asp-validation-for="Post.Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
         <label asp-for="Post.Text">Text</label>
         <textarea asp-for="Post.Text" class="form-control"></textarea>
         <span asp-validation-for="Post.Text" class="text-danger"></span>

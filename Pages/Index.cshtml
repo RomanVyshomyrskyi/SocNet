@@ -13,10 +13,12 @@
         @foreach(var post in Model.RecentPosts)
         {
             if (post == null) continue;
-            <div class="card">
-                <div class="card-header">
-                    <a href="">@post.ID</a>
-                </div>
+            <div style="background-color: #2a2b38; color: white; margin: 10px;", class="card">
+                <a href="Index" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <h3>@post.Title</h3>
+                    </div>
+                </a>
                 <div class="card-body">
                     <p>@post.Text</p>
                 </div>

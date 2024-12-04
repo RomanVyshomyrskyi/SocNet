@@ -75,6 +75,7 @@ namespace My_SocNet_Win.Classes.Posts
         {
             var filter = Builders<BasePost>.Filter.Eq(p => p.ID, post.ID);
             var update = Builders<BasePost>.Update
+                .Set(p => p.Title, post.Title)
                 .Set(p => p.Text, post.Text)
                 .Set(p => p.IsDeleted, post.IsDeleted)
                 .Set(p => p.LastCreatorPostID, post.LastCreatorPostID)

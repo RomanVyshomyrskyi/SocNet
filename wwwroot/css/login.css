@@ -283,3 +283,37 @@ h6 span{
 	width: auto;
 	display: block;
 }
+.post{
+  --bs-post-spacer-y: 1rem;
+    --bs-post-spacer-x: 1rem;
+    --bs-post-title-spacer-y: 0.5rem;
+    --bs-post-title-color: ;
+    --bs-post-subtitle-color: ;
+    --bs-post-border-width: var(--bs-border-width);
+    --bs-post-border-color: var(--bs-border-color-translucent);
+    --bs-post-border-radius: var(--bs-border-radius);
+    --bs-post-box-shadow: ;
+    --bs-post-inner-border-radius: calc(var(--bs-border-radius) -(var(--bs-border-width)));
+    --bs-post-cap-padding-y: 0.5rem;
+    --bs-post-cap-padding-x: 1rem;
+    --bs-post-cap-bg: rgba(var(--bs-body-color-rgb), 0.03);
+    --bs-post-cap-color: ;
+    --bs-post-height: ;
+    --bs-post-color: ;
+    --bs-post-bg: #2a2b38;
+    --bs-post-img-overlay-padding: 1rem;
+    --bs-post-group-margin: 0.75rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: var(--bs-card-height);
+    color: var(--bs-body-color);
+    word-wrap: break-word;
+    background-color: var(--bs-card-bg);
+    background-clip: border-box;
+    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    border-radius: var(--bs-card-border-radius);
+    margin: 10px;
+    color: white;
+}

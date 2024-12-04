@@ -39,10 +39,11 @@ namespace My_SocNet_Win.Classes.Posts
                         var command = connection.CreateCommand();
                         command.Transaction = transaction;
                         command.CommandText = @"
-                            INSERT INTO BasePosts (CreatorID, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes)
-                            VALUES (@CreatorID, @Text, @IsDeleted, @LastCreatorPostID, @DateOfCreation, @Likes, @Dislikes);
+                            INSERT INTO BasePosts (CreatorID, Title, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes)
+                            VALUES (@CreatorID, @Title, @Text, @IsDeleted, @LastCreatorPostID, @DateOfCreation, @Likes, @Dislikes);
                             SELECT SCOPE_IDENTITY();";
                         command.Parameters.AddWithValue("@CreatorID", post.CreatorID);
+                        command.Parameters.AddWithValue("@Title", post.Title);
                         command.Parameters.AddWithValue("@Text", post.Text);
                         command.Parameters.AddWithValue("@IsDeleted", post.IsDeleted);
                         command.Parameters.AddWithValue("@LastCreatorPostID", post.LastCreatorPostID);
@@ -100,7 +101,7 @@ namespace My_SocNet_Win.Classes.Posts
                 await connection.OpenAsync();
                 var command = connection.CreateCommand();
                 command.CommandText = @"
-                    SELECT ID, CreatorID, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes
+                    SELECT ID, CreatorID, Title, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes
                     FROM BasePosts
                     WHERE ID = @ID;";
                 command.Parameters.AddWithValue("@ID", id);
@@ -113,12 +114,13 @@ namespace My_SocNet_Win.Classes.Posts
                         {
                             ID = reader.GetInt32(0),
                             CreatorID = reader.GetInt32(1),
-                            Text = reader.GetString(2),
-                            IsDeleted = reader.GetBoolean(3),
-                            LastCreatorPostID = reader.GetInt32(4),
-                            DateOfCreation = reader.GetDateTime(5),
-                            Likes = reader.GetInt32(6),
-                            Dislikes = reader.GetInt32(7),
+                            Title = reader.GetString(2),
+                            Text = reader.GetString(3),
+                            IsDeleted = reader.GetBoolean(4),
+                            LastCreatorPostID = reader.GetInt32(5),
+                            DateOfCreation = reader.GetDateTime(6),
+                            Likes = reader.GetInt32(7),
+                            Dislikes = reader.GetInt32(8),
                             Images = new List<byte[]>()
                         };
 
@@ -154,7 +156,7 @@ namespace My_SocNet_Win.Classes.Posts
                 await connection.OpenAsync();
                 var command = connection.CreateCommand();
                 command.CommandText = @"
-                    SELECT TOP (@Count) ID, CreatorID, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes
+                    SELECT TOP (@Count) ID, CreatorID, Title, Text, IsDeleted, LastCreatorPostID, DateOfCreation, Likes, Dislikes
                     FROM BasePosts
                     WHERE IsDeleted = 0
                     ORDER BY ID DESC;";
@@ -169,12 +171,13 @@ namespace My_SocNet_Win.Classes.Posts
                         {
                             ID = reader.GetInt32(0),
                             CreatorID = reader.GetInt32(1),
-                            Text = reader.GetString(2),
-                            IsDeleted = reader.GetBoolean(3),
-                            LastCreatorPostID = reader.GetInt32(4),
-                            DateOfCreation = reader.GetDateTime(5),
-                            Likes = reader.GetInt32(6),
-                            Dislikes = reader.GetInt32(7),
+                            Title = reader.GetString(2),
+                            Text = reader.GetString(3),
+                            IsDeleted = reader.GetBoolean(4),
+                            LastCreatorPostID = reader.GetInt32(5),
+                            DateOfCreation = reader.GetDateTime(6),
+                            Likes = reader.GetInt32(7),
+                            Dislikes = reader.GetInt32(8),
                             Images = new List<byte[]>()
                         };
 
@@ -214,9 +217,10 @@ namespace My_SocNet_Win.Classes.Posts
                         command.Transaction = transaction;
                         command.CommandText = @"
                             UPDATE BasePosts
-                            SET Text = @Text, IsDeleted = @IsDeleted, LastCreatorPostID = @LastCreatorPostID, DateOfCreation = @DateOfCreation, Likes = @Likes, Dislikes = @Dislikes
+                            SET Title = @Title, Text = @Text, IsDeleted = @IsDeleted, LastCreatorPostID = @LastCreatorPostID, DateOfCreation = @DateOfCreation, Likes = @Likes, Dislikes = @Dislikes
                             WHERE ID = @ID;";
                         command.Parameters.AddWithValue("@ID", post.ID);
+                        command.Parameters.AddWithValue("@Title", post.Title);
                         command.Parameters.AddWithValue("@Text", post.Text);
                         command.Parameters.AddWithValue("@IsDeleted", post.IsDeleted);
                         command.Parameters.AddWithValue("@LastCreatorPostID", post.LastCreatorPostID);
@@ -258,5 +262,4 @@ namespace My_SocNet_Win.Classes.Posts
             }
         }
     }
-
 }
