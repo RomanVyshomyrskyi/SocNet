@@ -85,10 +85,4 @@ namespace My_SocNet_Win.Classes.Comment
             return counter.SequenceValue;
         }
     }
-
-    public class Counter
-    {
-        public string Id { get; set; }
-        public int SequenceValue { get; set; }
-    }
 }
