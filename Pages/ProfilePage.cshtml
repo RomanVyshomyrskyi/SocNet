@@ -4,7 +4,7 @@
     ViewData["Title"] = "Profile";
 }
 
-<div class="grid-container" >
+<div class="grid-container">
     <div class="post-bg">
         <h1>@Model.CurrentUser.Id</h1>
         <h1>@Model.CurrentUser.UserName</h1>
@@ -12,3 +12,36 @@
         <h1>@Model.CurrentUser.DateOfCreation</h1>
     </div>
 </div>
+
+<div class="logout-container">
+    <button class="btn btn-danger" onclick="showLogoutConfirmation()">Logout</button>
+</div>
+
+<div id="logoutModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Logout</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to log out?</p>
+            </div>
+            <div class="modal-footer">
+                <form method="post" asp-page-handler="Logout">
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                </form>
+                <form method="post" asp-page-handler="Cancel">
+                    <button type="submit" class="btn btn-secondary">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showLogoutConfirmation() {
+            $('#logoutModal').modal('show');
+        }
+    </script>
+}

@@ -7,6 +7,8 @@ using Microsoft.Extensions.Options;
 using My_SocNet_Win.Classes;
 using My_SocNet_Win.Classes.Converters;
 using My_SocNet_Win.Classes.User;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 
 namespace My_SocNet_Win.Pages
 {
@@ -25,13 +27,23 @@ namespace My_SocNet_Win.Pages
             _cache = cache;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
             var userId = User.FindFirstValue("UserId");
-            var dbUser = _userRepository.GetUserByIdAsync(Int32.Parse(userId)).Result;
+            var dbUser = await _userRepository.GetUserByIdAsync(Int32.Parse(userId));
             CurrentUser = UserConverter.ConvertToBaseUser(dbUser);
             ViewData["SiteName"] = _siteSettings.Name;
-            ViewData["Version"] = _siteSettings.Version;   
+            ViewData["Version"] = _siteSettings.Version;
+        }
+
+        public async Task<IActionResult> OnPostLogoutAsync()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToPage("/Index");
+        }
+        public async Task<IActionResult> OnPostCancelAsync()
+        {
+            return await Task.FromResult(RedirectToPage());
         }
     }
 }

@@ -64,32 +64,30 @@ namespace My_SocNet_Win.Pages
             }
         }
 
-        public async Task<IActionResult> OnPostUpdateLikesDislikes([FromBody] List<LikeDislikeUpdate> updates)
+        public async Task<IActionResult> OnPostUpdateLikesDislikes(int PostId, string Type, int Delta)
         {
-            foreach (var update in updates)
+            var post = await _postRepository.GetPost(PostId);
+            if (post != null)
             {
-                var post = await _postRepository.GetPost(update.PostId);
-                if (post != null)
+                if (Type == "like")
                 {
-                    if (update.Type == "like")
+                    post.Likes += Delta;
+                    if (Delta > 0 && post.Dislikes > 0)
                     {
-                        post.Likes += update.Delta;
+                        post.Dislikes -= 1;
                     }
-                    else if (update.Type == "dislike")
-                    {
-                        post.Dislikes += update.Delta;
-                    }
-                    await _postRepository.UpdatePost(post);
                 }
+                else if (Type == "dislike")
+                {
+                    post.Dislikes += Delta;
+                    if (Delta > 0 && post.Likes > 0)
+                    {
+                        post.Likes -= 1;
+                    }
+                }
+                await _postRepository.UpdatePost(post);
             }
             return new JsonResult(new { success = true });
-        }
-
-        public class LikeDislikeUpdate
-        {
-            public int PostId { get; set; }
-            public string Type { get; set; }
-            public int Delta { get; set; }
         }
     }
 }

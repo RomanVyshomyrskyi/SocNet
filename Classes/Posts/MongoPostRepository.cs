@@ -84,7 +84,12 @@ namespace My_SocNet_Win.Classes.Posts
                 .Set(p => p.Dislikes, post.Dislikes)
                 .Set(p => p.Images, post.Images);
 
-            var result = await _postsCollection.FindOneAndUpdateAsync(filter, update);
+            var options = new FindOneAndUpdateOptions<BasePost>
+            {
+                ReturnDocument = ReturnDocument.After
+            };
+
+            var result = await _postsCollection.FindOneAndUpdateAsync(filter, update, options);
             return result;
         }
 
