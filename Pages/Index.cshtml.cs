@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using My_SocNet_Win.Classes;
@@ -61,6 +62,34 @@ namespace My_SocNet_Win.Pages
             {
                 _logger.LogError(ex, "Error getting recent posts");
             }
+        }
+
+        public async Task<IActionResult> OnPostUpdateLikesDislikes([FromBody] List<LikeDislikeUpdate> updates)
+        {
+            foreach (var update in updates)
+            {
+                var post = await _postRepository.GetPost(update.PostId);
+                if (post != null)
+                {
+                    if (update.Type == "like")
+                    {
+                        post.Likes += update.Delta;
+                    }
+                    else if (update.Type == "dislike")
+                    {
+                        post.Dislikes += update.Delta;
+                    }
+                    await _postRepository.UpdatePost(post);
+                }
+            }
+            return new JsonResult(new { success = true });
+        }
+
+        public class LikeDislikeUpdate
+        {
+            public int PostId { get; set; }
+            public string Type { get; set; }
+            public int Delta { get; set; }
         }
     }
 }

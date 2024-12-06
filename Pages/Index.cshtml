@@ -4,6 +4,20 @@
     ViewData["Title"] = "Home page";
 }
 
+<style>
+    .like-button, .dislike-button {
+        cursor: pointer;
+        font-size: 1.5em;
+        margin-right: 10px;
+    }
+    .liked {
+        color: #c40434;
+    }
+    .disliked {
+        color: #7104c4;
+    }
+</style>
+
 @if(User.Identity.IsAuthenticated)
 {
     <div style="text-align: right;">
@@ -13,18 +27,33 @@
         @foreach(var post in Model.RecentPosts)
         {
             if (post == null) continue;
-            <div style="background-color: #2a2b38; color: white; margin: 10px;", class="card">
-                <a href="Index" style="text-decoration: none; color: inherit;">
+            <div style="background-color: #2a2b38; color: white; margin: 10px;" class="card">
+                @if (post.Images != null && post.Images.Count > 0)
+                {
+                    <div class="card-header" style="background-image: url('data:image/jpeg;base64,@Convert.ToBase64String(post.Images[0])'); background-size: cover; background-position: center; height: 200px;">
+                    </div>
+                }
+                else
+                {
                     <div class="card-header">
                         <h3>@post.Title</h3>
                     </div>
+                }
+                <a href="Index" style="text-decoration: none; color: inherit;">
+                    <div class="card-body">
+                        <h3>@post.Title</h3>
+                        <p>@post.Text</p>
+                    </div>
                 </a>
-                <div class="card-body">
-                    <p>@post.Text</p>
-                </div>
                 <div class="card-footer">
                     <p>Created by: @Model.UserNames[post.CreatorID]</p>
                     <p>Created at: @post.DateOfCreation</p>
+                    <div>
+                        <i class="far fa-heart like-button" data-post-id="@post.ID" onclick="toggleLike(this)"></i>
+                        <i class="far fa-heart-broken dislike-button" data-post-id="@post.ID" onclick="toggleDislike(this)"></i>
+                        <span id="like-count-@post.ID">@post.Likes</span> Likes
+                        <span id="dislike-count-@post.ID">@post.Dislikes</span> Dislikes
+                    </div>
                 </div>
             </div>
         }
@@ -41,4 +70,75 @@ else
             You can see all data after logging in.
         </p>
     </div>
+}
+
+@section Scripts {
+    <script>
+        const likedPosts = new Set();
+        const dislikedPosts = new Set();
+
+        function toggleLike(element) {
+            const postId = element.getAttribute('data-post-id');
+            if (likedPosts.has(postId)) {
+                likedPosts.delete(postId);
+                element.classList.remove('fas', 'liked');
+                element.classList.add('far');
+                updateCounter(postId, 'like', -1);
+            } else {
+                likedPosts.add(postId);
+                element.classList.remove('far');
+                element.classList.add('fas', 'liked');
+                updateCounter(postId, 'like', 1);
+                if (dislikedPosts.has(postId)) {
+                    dislikedPosts.delete(postId);
+                    const dislikeElement = document.querySelector(`.dislike-button[data-post-id="${postId}"]`);
+                    dislikeElement.classList.remove('fas', 'disliked');
+                    dislikeElement.classList.add('far');
+                    updateCounter(postId, 'dislike', -1);
+                }
+            }
+        }
+
+        function toggleDislike(element) {
+            const postId = element.getAttribute('data-post-id');
+            if (dislikedPosts.has(postId)) {
+                dislikedPosts.delete(postId);
+                element.classList.remove('fas', 'disliked');
+                element.classList.add('far');
+                updateCounter(postId, 'dislike', -1);
+            } else {
+                dislikedPosts.add(postId);
+                element.classList.remove('far');
+                element.classList.add('fas', 'disliked');
+                updateCounter(postId, 'dislike', 1);
+                if (likedPosts.has(postId)) {
+                    likedPosts.delete(postId);
+                    const likeElement = document.querySelector(`.like-button[data-post-id="${postId}"]`);
+                    likeElement.classList.remove('fas', 'liked');
+                    likeElement.classList.add('far');
+                    updateCounter(postId, 'like', -1);
+                }
+            }
+        }
+
+        function updateCounter(postId, type, delta) {
+            const countElement = document.getElementById(`${type}-count-${postId}`);
+            const currentCount = parseInt(countElement.textContent);
+            countElement.textContent = currentCount + delta;
+        }
+
+        window.addEventListener('beforeunload', function () {
+            const updates = [];
+            likedPosts.forEach(postId => {
+                updates.push({ postId, type: 'like', delta: 1 });
+            });
+            dislikedPosts.forEach(postId => {
+                updates.push({ postId, type: 'dislike', delta: 1 });
+            });
+
+            if (updates.length > 0) {
+                navigator.sendBeacon('/Index?handler=UpdateLikesDislikes', JSON.stringify(updates));
+            }
+        });
+    </script>
 }

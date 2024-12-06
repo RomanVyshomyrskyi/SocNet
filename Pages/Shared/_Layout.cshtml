@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - My_SocNet_Win</title>
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/My_SocNet_Win.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
     <header>
@@ -17,17 +17,17 @@
                     <div class="navigation">
                         <nav>
                             <ul class="nav-type">
-                                    <li><a href="Index" class="nav_burItem">Home</a></li>
-                                    <li><a href="" class="nav_burItem">About</a></li>
-                                    <li><a href="" class="nav_burItem">Contact</a></li>
-                                    @if (User.Identity.IsAuthenticated)
-                                    {
-                                        <li><a href="SingOut" class="nav_burItem">Profile</a></li>
-                                    }
-                                    else
-                                    {
-                                        <li><a href="SignInUP" class="nav_burItem">Login</a></li>
-                                    }
+                                <li><a href="Index" class="nav_burItem">Home</a></li>
+                                <li><a href="" class="nav_burItem">About</a></li>
+                                <li><a href="" class="nav_burItem">Contact</a></li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li><a href="SingOut" class="nav_burItem">Profile</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="SignInUP" class="nav_burItem">Login</a></li>
+                                }
                             </ul>
                         </nav>  
                     </div>
@@ -47,7 +47,6 @@
             <p>&copy; 2024 - @ViewData["Name"] - Version: @ViewData["Version"] </p>
         </div>
     </footer>
-
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
