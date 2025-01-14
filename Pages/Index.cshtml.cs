@@ -44,24 +44,24 @@ namespace My_SocNet_Win.Pages
             ViewData["Footer"] = _siteSettings.Footer;
             ViewData["Version"] = _siteSettings.Version;
             #endregion
+            //TODO: Implement the following code for SQL (it cose an error)
+            // try
+            // {
+            //     RecentPosts = await _postRepository.GetPosts(15);
 
-            try
-            {
-                RecentPosts = await _postRepository.GetPosts(15);
-
-                foreach (var post in RecentPosts)
-                {
-                    if (post != null && !UserNames.ContainsKey(post.CreatorID))
-                    {
-                        var userName = await _userRepository.GetUserNameByIdAsync(post.CreatorID);
-                        UserNames[post.CreatorID] = userName ?? "Unknown";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting recent posts");
-            }
+            //     foreach (var post in RecentPosts)
+            //     {
+            //         if (post != null && !UserNames.ContainsKey(post.CreatorID))
+            //         {
+            //             var userName = await _userRepository.GetUserNameByIdAsync(post.CreatorID);
+            //             UserNames[post.CreatorID] = userName ?? "Unknown";
+            //         }
+            //     }
+            // }
+            // catch (Exception ex)
+            // {
+            //     _logger.LogError(ex, "Error getting recent posts");
+            // }
         }
 
         public async Task<IActionResult> OnPostUpdateLikesDislikes(int PostId, string Type, int Delta)
